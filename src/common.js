@@ -78,13 +78,31 @@ const getDoubanId = (imdbId) => {
         try {
           const data = JSON.parse(res.responseText);
           if (data.length > 0) {
-            resolve(data[0]?.id);
+            resolve(data[0]);
           }
         } catch (error) {
           console.log(error);
         }
       },
     });
+  });
+};
+const getTvSeasonData = (data) => {
+  const { titleDom } = CURRENT_SITE_INFO;
+  const torrentTitle = $(titleDom).text();
+  return new Promise((resolve, reject) => {
+    const { episode = '', title } = data;
+    if (episode) {
+      const seasonNumber = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
+      if (parseInt(seasonNumber) === 1) {
+        resolve(data);
+      } else {
+        const query = title.replace(/第.+?季/, `第${seasonNumber}季`);
+        getDoubanId(query).then(data => {
+          resolve(data);
+        });
+      }
+    }
   });
 };
 const getDoubanInfo = (doubanId) => {
@@ -134,25 +152,37 @@ const createDoubanDom = (doubanId) => {
   iframe.height = '345';
   iframe.frameborder = '0';
   iframe.scrolling = 'no';
-  let { doubanContainerDom, insertDomSelector, siteName } = CURRENT_SITE_INFO;
+  const div = document.createElement('div');
+  let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
   if (siteName === 'HDT') {
     insertDomSelector = $(insertDomSelector).parent();
   }
   $(insertDomSelector).before(doubanContainerDom);
-  document.querySelector('.douban-dom').appendChild(iframe);
+  const doubanLink = `https://movie.douban.com/subject/${doubanId}`;
+  GM_xmlhttpRequest({
+    url: `${doubanLink}/output_card`,
+    method: 'GET',
+    onload (res) {
+      const htmlData = res.responseText.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
+
+      let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
+      headDom = headDom.replace(/<link.+?>/g, '');
+      const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
+      div.insertAdjacentHTML('beforeend', headDom);
+      div.insertAdjacentHTML('beforeend', bodyDom);
+      $('.douban-dom').append(div).attr('douban-link', doubanLink);
+      if ($(poster).attr('src')) {
+        let posterStyle = $('.picture-douban-wrapper').attr('style');
+        posterStyle = posterStyle.replace(/\(.+\)/, `(${$(poster).attr('src')})`);
+        $('.picture-douban-wrapper').attr('style', posterStyle);
+      }
+      $('.douban-dom').click(() => {
+        GM_openInTab(doubanLink);
+      });
+    },
+  });
   iframe.onload = () => {
-    GM_xmlhttpRequest({
-      url: `https://movie.douban.com/subject/${doubanId}/output_card`,
-      method: 'GET',
-      onload (res) {
-        // eslint-disable-next-line no-undef
-        const iframeDocument = doubanIframe.contentWindow.document;
-        const headDom = res.responseText.match(/<head>((.|\n)+)<\/head>/)[1];
-        const bodyDom = res.responseText.match(/<body>((.|\n)+)<\/body>/)[1];
-        iframeDocument.head.insertAdjacentHTML('beforeend', headDom);
-        iframeDocument.body.insertAdjacentHTML('beforeend', bodyDom);
-      },
-    });
+
   };
 };
 
@@ -163,4 +193,5 @@ export {
   addToPtpPage,
   getDoubanId,
   createDoubanDom,
+  getTvSeasonData,
 };

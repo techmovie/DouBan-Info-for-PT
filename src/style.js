@@ -54,6 +54,36 @@ export default GM_addStyle(`
 }
 .douban-dom {
     display: flex;
-    justify-content: center;
+    cursor: pointer;
+}
+.douban-dom {
+    text-align: left;
+}
+#douban-wrapper *{
+    box-sizing: content-box;
+}
+#douban-wrapper .clearfix:after { 
+    content: "."; 
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+#douban-wrapper .clearfix {
+    zoom: 1;
+    display: inline-block; 
+    _height: 1px;
+}
+#douban-wrapper  .clearfix { 
+    height: 1% 
+}
+#douban-wrapper .clearfix { 
+    display: block 
+}
+#douban-wrapper .rating_per{
+    color: #111;
+}
+#douban-wrapper .grid{
+    overflow: initial;
 }
 `);

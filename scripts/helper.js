@@ -52,8 +52,11 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://uhdbits.org/torrents.php?id=*
 // @match        https://filelist.io/details.php?id=*
 // @match        https://hd-torrents.org/details.php?id=*
+// @match        https://karagarga.in/details.php?id=*
+// @match        https://privatehd.to/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
+// @grant        GM_openInTab
 // @license      MIT
 // ==/UserScript==`;
 
