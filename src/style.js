@@ -52,44 +52,8 @@ export default GM_addStyle(`
     line-height: 24px;
     font-size: 14px;
 }
-.cast-empty{
-    background-image: url(GM.getResourceUrl("emptyIcon")); width: auto;
+.douban-dom {
     display: flex;
-    align-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    overflow: hidden;
-    height: 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-color: #dbdbdb;
-    box-sizing: border-box;
-    background-size: 50%;
-    text-overflow: ellipsis;
-}
-.cast-item{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    flex-shrink: 0;
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 4px;
-    width: 138px;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding-bottom: 10px;
-    border-radius: 6px;
-    overflow: hidden;
-}
-.cast-item-image{
-    width: 138px;
-    height: 175px;
-    display:block;
-    overflow: hidden;
-}
-.cast-item .actor-name{
-    color: #000;
-    font-weight: bold;
-    padding: 10px 10px 0;
+    justify-content: center;
 }
 `);

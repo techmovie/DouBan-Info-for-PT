@@ -1,0 +1,6 @@
+url: 'https://hd-torrents.org'
+host: hd-torrents.org
+siteName: HDT
+imdb: '.imdbnew2 a[href*="imdb.com/title"]:first'
+insertDomSelector: 'td.detailsleft:contains(IMDb)'
+doubanContainerDom: '<tr><td align="left" class="detailsleft">豆瓣</td><td valign="top" align="left" class="detailshash douban-dom"></td></tr>'

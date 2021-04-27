@@ -1,0 +1,6 @@
+url: 'https://uhdbits.org'
+host: uhdbits.org
+siteName: UHD
+imdb: '.tooltip.imdb_icon'
+insertDomSelector: '.main_column .box:nth-child(1)'
+doubanContainerDom: '<div class="box"><div class="head"><a href="#">↑</a>&nbsp;<strong>豆瓣</strong></div><div class="body douban-dom"></div></div>'

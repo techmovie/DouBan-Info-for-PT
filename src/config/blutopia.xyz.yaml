@@ -1,0 +1,6 @@
+url: 'https://blutopia.xyz'
+host: blutopia.xyz
+siteName: BLU
+imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)'
+insertDomSelector: '#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1'
+doubanContainerDom: '<div class="douban-dom"></div>'

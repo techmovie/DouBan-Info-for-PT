@@ -1,0 +1,6 @@
+url: 'https://filelist.io'
+host: filelist.io
+siteName: FL
+imdb: '.cblock-innercontent div a[href*="imdb.com/title"]:first'
+insertDomSelector: '.cblock-innercontent hr.separator:first'
+doubanContainerDom: '<div class="douban-dom" style="width: 100%;padding-top:20px;"></div>'

@@ -1,0 +1,8 @@
+url: 'https://hdbits.org'
+host: hdbits.org
+siteName: HDB
+imdb:
+  movie: '.contentlayout h1 a' 
+  tv: '#details .showlinks li:nth-child(2) a'
+insertDomSelector: '#details>tbody>tr:nth-child(2)'
+doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>豆瓣信息</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom"></div></td></tr>'

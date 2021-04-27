@@ -45,17 +45,12 @@ exports.userScriptComment = `// ==UserScript==
 // @author       ${author}
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        https://passthepopcorn.me/torrents.php?id=*
-// @match        https://uhdbits.org/torrents.php?id=*
-// @match        https://totheglory.im/t/*
 // @match        https://beyond-hd.me/torrents/*
 // @match        https://blutopia.xyz/torrents/*
 // @match        https://asiancinema.me/torrents/*
-// @match        https://aither.cc/torrents/*
-// @match        https://broadcity.in/browse.php?imdb=*
+// @match        https://hdbits.org/details.php?id=*
+// @match        https://uhdbits.org/torrents.php?id=*
 // @grant        GM_addStyle
-// @grant        GM_getValue
-// @grant        GM_setValue
-// @grant        GM_openInTab
 // @grant        GM_xmlhttpRequest
 // @license      MIT
 // ==/UserScript==`;
