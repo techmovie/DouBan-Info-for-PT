@@ -50,6 +50,8 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://asiancinema.me/torrents/*
 // @match        https://hdbits.org/details.php?id=*
 // @match        https://uhdbits.org/torrents.php?id=*
+// @match        https://filelist.io/details.php?id=*
+// @match        https://hd-torrents.org/details.php?id=*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @license      MIT
