@@ -1,0 +1,7 @@
+url: 'https://asiancinema.me'
+host: asiancinema.me
+siteName: ACM
+poster: 'img.movie-poster'
+imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)'
+insertDomSelector: '#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1'
+doubanContainerDom: '<div class="douban-dom"></div>'
