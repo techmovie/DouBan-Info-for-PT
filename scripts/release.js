@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const bump = require('@jsdevtools/version-bump-prompt');
 const execa = require('execa');
 const ora = require('ora');
-const CURRENT_BRANCH = 'master';
+const CURRENT_BRANCH = 'main';
 const log = console.log;
 const showCurrentBranch = () => {
   return execa.sync('git', ['branch', '--show-current']).stdout;
