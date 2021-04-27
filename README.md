@@ -4,7 +4,9 @@
 
 为国外PT站增加中文信息，数据源来自于豆瓣。
 
-## 安装地址
+目前支持`PTP` `HDB` `KG` `BHD` `UHD` `FL` `PHD` `BLU` `ACM` `HDT`.
+
+## 安装
 
 [安装地址](https://greasyfork.org/zh-CN/scripts/410851-douban-info-for-pt)
 
@@ -18,7 +20,7 @@
 
 如需使用本脚本，请注明来源，谢谢合作！
 
-## 捐赠
+## ☕️Buy Me a coffee
 
 如果本项目对你有帮助，不妨通过微信或者支付宝进行小额捐赠，以支持该项目的持续维护和发展。
 
