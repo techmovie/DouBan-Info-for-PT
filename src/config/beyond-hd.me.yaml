@@ -2,5 +2,5 @@ url: 'https://beyond-hd.me'
 host: beyond-hd.me
 siteName: BHD
 imdb: '.badge-meta a[href*="imdb.com/title"]:nth-child(1)'
-insertDomSelector: '.movie-wrapper'
+insertDomSelector: '.movie-wrapper .movie-heading'
 doubanContainerDom: '<div class="douban-dom"></div>'
