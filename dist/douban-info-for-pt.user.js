@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.0.0
+// @version      1.1.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -11,8 +11,13 @@
 // @match        https://asiancinema.me/torrents/*
 // @match        https://hdbits.org/details.php?id=*
 // @match        https://uhdbits.org/torrents.php?id=*
+// @match        https://filelist.io/details.php?id=*
+// @match        https://hd-torrents.org/details.php?id=*
+// @match        https://karagarga.in/details.php?id=*
+// @match        https://privatehd.to/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
+// @grant        GM_openInTab
 // @license      MIT
 // ==/UserScript==
 (() => {
@@ -20,18 +25,28 @@
 
   // src/config.json
   var PT_SITE = {
+    "asiancinema.me": {
+      url: "https://asiancinema.me",
+      host: "asiancinema.me",
+      siteName: "ACM",
+      poster: "img.movie-poster",
+      imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
+      insertDomSelector: "#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1",
+      doubanContainerDom: '<div class="douban-dom"></div>'
+    },
     "beyond-hd.me": {
       url: "https://beyond-hd.me",
       host: "beyond-hd.me",
       siteName: "BHD",
       imdb: '.badge-meta a[href*="imdb.com/title"]:nth-child(1)',
-      insertDomSelector: ".movie-wrapper",
+      insertDomSelector: ".movie-wrapper .movie-heading",
       doubanContainerDom: '<div class="douban-dom"></div>'
     },
     "blutopia.xyz": {
       url: "https://blutopia.xyz",
       host: "blutopia.xyz",
       siteName: "BLU",
+      poster: "img.movie-poster",
       imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
       insertDomSelector: "#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1",
       doubanContainerDom: '<div class="douban-dom"></div>'
@@ -41,6 +56,7 @@
       host: "filelist.io",
       siteName: "FL",
       imdb: '.cblock-innercontent div a[href*="imdb.com/title"]:first',
+      poster: 'img[width="300px"][src*="image.tmdb.org"]',
       insertDomSelector: ".cblock-innercontent hr.separator:first",
       doubanContainerDom: '<div class="douban-dom" style="width: 100%;padding-top:20px;"></div>'
     },
@@ -48,6 +64,7 @@
       url: "https://hd-torrents.org",
       host: "hd-torrents.org",
       siteName: "HDT",
+      poster: "#IMDBDetailsInfoHideShowTR .imdbnew a img",
       imdb: '.imdbnew2 a[href*="imdb.com/title"]:first',
       insertDomSelector: "td.detailsleft:contains(IMDb)",
       doubanContainerDom: '<tr><td align="left" class="detailsleft">\u8C46\u74E3</td><td valign="top" align="left" class="detailshash douban-dom"></td></tr>'
@@ -63,6 +80,14 @@
       insertDomSelector: "#details>tbody>tr:nth-child(2)",
       doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom"></div></td></tr>'
     },
+    "karagarga.in": {
+      url: "https://karagarga.in",
+      host: "karagarga.in",
+      siteName: "KG",
+      imdb: 'td a[href*="imdb.com/title"]:first',
+      insertDomSelector: ".outer h1~table:first",
+      doubanContainerDom: '<div class="douban-dom kg" style="width:770px;padding-top:20px;"></div>'
+    },
     "passthepopcorn.me": {
       url: "https://passthepopcorn.me",
       host: "passthepopcorn.me",
@@ -70,12 +95,22 @@
       siteType: "gazelle",
       imdb: "#imdb-title-link"
     },
+    "privatehd.to": {
+      url: "https://privatehd.to",
+      host: "privatehd.to'",
+      siteName: "PHD",
+      imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first',
+      poster: ".movie-poster img",
+      insertDomSelector: ".movie-title",
+      doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
+    },
     "uhdbits.org": {
       url: "https://uhdbits.org",
       host: "uhdbits.org",
       siteName: "UHD",
       imdb: ".tooltip.imdb_icon",
-      insertDomSelector: ".main_column .box:nth-child(1)",
+      poster: ".poster_box .imgbox img",
+      insertDomSelector: "div.head:contains(IMDB)",
       doubanContainerDom: '<div class="box"><div class="head"><a href="#">\u2191</a>&nbsp;<strong>\u8C46\u74E3</strong></div><div class="body douban-dom"></div></div>'
     }
   };
@@ -161,17 +196,35 @@
         method: "GET",
         url: `${DOUBAN_SEARCH_API}?q=${imdbId}`,
         onload(res) {
-          var _a3;
           try {
             const data = JSON.parse(res.responseText);
             if (data.length > 0) {
-              resolve((_a3 = data[0]) == null ? void 0 : _a3.id);
+              resolve(data[0]);
             }
           } catch (error) {
             console.log(error);
           }
         }
       });
+    });
+  };
+  var getTvSeasonData = (data) => {
+    const {titleDom} = CURRENT_SITE_INFO;
+    const torrentTitle = $(titleDom).text();
+    return new Promise((resolve, reject) => {
+      var _a3, _b2;
+      const {episode = "", title} = data;
+      if (episode) {
+        const seasonNumber = (_b2 = (_a3 = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)) == null ? void 0 : _a3[1]) != null ? _b2 : 1;
+        if (parseInt(seasonNumber) === 1) {
+          resolve(data);
+        } else {
+          const query = title.replace(/第.+?季/, `\u7B2C${seasonNumber}\u5B63`);
+          getDoubanId(query).then((data2) => {
+            resolve(data2);
+          });
+        }
+      }
     });
   };
   var getDoubanInfo = (doubanId) => {
@@ -220,24 +273,35 @@
     iframe.height = "345";
     iframe.frameborder = "0";
     iframe.scrolling = "no";
-    let {doubanContainerDom, insertDomSelector, siteName} = CURRENT_SITE_INFO;
+    const div = document.createElement("div");
+    let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
     if (siteName === "HDT") {
       insertDomSelector = $(insertDomSelector).parent();
     }
     $(insertDomSelector).before(doubanContainerDom);
-    document.querySelector(".douban-dom").appendChild(iframe);
-    iframe.onload = () => {
-      GM_xmlhttpRequest({
-        url: `https://movie.douban.com/subject/${doubanId}/output_card`,
-        method: "GET",
-        onload(res) {
-          const iframeDocument = doubanIframe.contentWindow.document;
-          const headDom = res.responseText.match(/<head>((.|\n)+)<\/head>/)[1];
-          const bodyDom = res.responseText.match(/<body>((.|\n)+)<\/body>/)[1];
-          iframeDocument.head.insertAdjacentHTML("beforeend", headDom);
-          iframeDocument.body.insertAdjacentHTML("beforeend", bodyDom);
+    const doubanLink = `https://movie.douban.com/subject/${doubanId}`;
+    GM_xmlhttpRequest({
+      url: `${doubanLink}/output_card`,
+      method: "GET",
+      onload(res) {
+        const htmlData = res.responseText.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
+        let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
+        headDom = headDom.replace(/<link.+?>/g, "");
+        const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
+        div.insertAdjacentHTML("beforeend", headDom);
+        div.insertAdjacentHTML("beforeend", bodyDom);
+        $(".douban-dom").append(div).attr("douban-link", doubanLink);
+        if ($(poster).attr("src")) {
+          let posterStyle = $(".picture-douban-wrapper").attr("style");
+          posterStyle = posterStyle.replace(/\(.+\)/, `(${$(poster).attr("src")})`);
+          $(".picture-douban-wrapper").attr("style", posterStyle);
         }
-      });
+        $(".douban-dom").click(() => {
+          GM_openInTab(doubanLink);
+        });
+      }
+    });
+    iframe.onload = () => {
     };
   };
 
@@ -298,7 +362,37 @@
 }
 .douban-dom {
     display: flex;
-    justify-content: center;
+    cursor: pointer;
+}
+.douban-dom {
+    text-align: left;
+}
+#douban-wrapper *{
+    box-sizing: content-box;
+}
+#douban-wrapper .clearfix:after { 
+    content: "."; 
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+#douban-wrapper .clearfix {
+    zoom: 1;
+    display: inline-block; 
+    _height: 1px;
+}
+#douban-wrapper  .clearfix { 
+    height: 1% 
+}
+#douban-wrapper .clearfix { 
+    display: block 
+}
+#douban-wrapper .rating_per{
+    color: #111;
+}
+#douban-wrapper .grid{
+    overflow: initial;
 }
 `);
 
@@ -306,13 +400,18 @@
   (async () => {
     if (CURRENT_SITE_INFO) {
       const imdbId = getImdbId();
-      const doubanId = await getDoubanId(imdbId);
+      const movieData = await getDoubanId(imdbId);
+      let {id, episode = ""} = movieData;
+      if (episode) {
+        const tvData = await getTvSeasonData(movieData);
+        id = tvData.id;
+      }
       if (CURRENT_SITE_NAME === "PTP") {
-        getDoubanInfo(doubanId).then((doubanData) => {
+        getDoubanInfo(id).then((doubanData) => {
           addToPtpPage(doubanData);
         });
       } else {
-        createDoubanDom(doubanId);
+        createDoubanDom(id);
       }
     }
   })();
