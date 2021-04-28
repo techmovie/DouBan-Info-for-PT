@@ -54,6 +54,11 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://hd-torrents.org/details.php?id=*
 // @match        https://karagarga.in/details.php?id=*
 // @match        https://privatehd.to/torrent/*
+// @match        https://www.rarbgmirror.com/torrent/*
+// @match        http://rarbggo.org/torrent/*
+// @match        http://rarbggo.to/torrent/*
+// @match        https://rarbgprx.org/torrent/*
+// @match        https://proxyrarbg.org/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab

@@ -86,4 +86,10 @@ export default GM_addStyle(`
 #douban-wrapper .grid{
     overflow: initial;
 }
+.content-rounded #douban-wrapper div{
+    margin-left: 0;
+}
+#douban-wrapper #content .douban-icon .icon-pt1 {
+    background-image:none;
+}
 `);

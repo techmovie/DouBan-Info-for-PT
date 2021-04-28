@@ -148,7 +148,7 @@ const formatDoubanInfo = (data) => {
 const createDoubanDom = (doubanId) => {
   const div = document.createElement('div');
   let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
-  if (siteName === 'HDT') {
+  if (siteName.match(/(HDT|RARBG)$/)) {
     insertDomSelector = $(insertDomSelector).parent();
   }
   $(insertDomSelector).before(doubanContainerDom);

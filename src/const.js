@@ -1,6 +1,13 @@
 import { PT_SITE } from './config.json';
 
-const CURRENT_SITE_INFO = PT_SITE?.[location.host] ?? '';
+const host = location.host;
+let siteInfo = PT_SITE?.[host] ?? '';
+if (host && host.match(/rarbg/i)) {
+  siteInfo = PT_SITE['www.rarbgmirror.com'];
+} else {
+  siteInfo = PT_SITE?.[host] ?? '';
+}
+const CURRENT_SITE_INFO = siteInfo;
 const CURRENT_SITE_NAME = CURRENT_SITE_INFO?.siteName ?? '';
 const DOUBAN_API_URL = 'https://omit.mkrobot.org/movie/infos';
 const DOUBAN_SEARCH_API = 'https://movie.douban.com/j/subject_suggest';
