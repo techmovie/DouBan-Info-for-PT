@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.0
+// @version      1.1.1
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -122,6 +122,12 @@
   var CURRENT_SITE_NAME = (_a2 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a2 : "";
   var DOUBAN_API_URL = "https://omit.mkrobot.org/movie/infos";
   var DOUBAN_SEARCH_API = "https://movie.douban.com/j/subject_suggest";
+  var PIC_URLS = {
+    border: "https://ptpimg.me/zz4632.png",
+    icon2x: "https://ptpimg.me/n74cjc.png",
+    icon: "https://ptpimg.me/yze1gz.png",
+    line: "https://ptpimg.me/e11hb1.png"
+  };
 
   // src/common.js
   var isChinese = (title) => {
@@ -267,12 +273,6 @@
     });
   };
   var createDoubanDom = (doubanId) => {
-    const iframe = document.createElement("iframe");
-    iframe.id = "doubanIframe";
-    iframe.width = "770";
-    iframe.height = "345";
-    iframe.frameborder = "0";
-    iframe.scrolling = "no";
     const div = document.createElement("div");
     let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
     if (siteName === "HDT") {
@@ -284,7 +284,11 @@
       url: `${doubanLink}/output_card`,
       method: "GET",
       onload(res) {
-        const htmlData = res.responseText.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
+        let htmlData = res.responseText.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
+        htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
+        htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
+        htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
+        htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
         let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
         headDom = headDom.replace(/<link.+?>/g, "");
         const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
@@ -301,8 +305,6 @@
         });
       }
     });
-    iframe.onload = () => {
-    };
   };
 
   // src/style.js
