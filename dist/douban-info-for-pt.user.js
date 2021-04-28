@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.1
+// @version      1.1.2
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -15,6 +15,11 @@
 // @match        https://hd-torrents.org/details.php?id=*
 // @match        https://karagarga.in/details.php?id=*
 // @match        https://privatehd.to/torrent/*
+// @match        https://www.rarbgmirror.com/torrent/*
+// @match        http://rarbggo.org/torrent/*
+// @match        http://rarbggo.to/torrent/*
+// @match        https://rarbgprx.org/torrent/*
+// @match        https://proxyrarbg.org/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
@@ -112,14 +117,31 @@
       poster: ".poster_box .imgbox img",
       insertDomSelector: "div.head:contains(IMDB)",
       doubanContainerDom: '<div class="box"><div class="head"><a href="#">\u2191</a>&nbsp;<strong>\u8C46\u74E3</strong></div><div class="body douban-dom"></div></div>'
+    },
+    "www.rarbgmirror.com": {
+      url: "https://www.rarbgmirror.com",
+      host: "www.rarbgmirror.com",
+      siteName: "RARBG",
+      poster: "td.header2:contains(Poster) ~ td img",
+      imdb: '.lista a[href*="imdb.com/title"]:first',
+      insertDomSelector: "td.header2:contains(Poster)",
+      doubanContainerDom: '<tr><td align="right" class="header2" valign="top">\u8C46\u74E3</td><td class="lisaa douban-dom"></td></tr>'
     }
   };
 
   // src/const.js
+  var host = location.host;
   var _a, _b;
-  var CURRENT_SITE_INFO = (_b = (_a = PT_SITE) == null ? void 0 : _a[location.host]) != null ? _b : "";
-  var _a2;
-  var CURRENT_SITE_NAME = (_a2 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a2 : "";
+  var siteInfo = (_b = (_a = PT_SITE) == null ? void 0 : _a[host]) != null ? _b : "";
+  var _a2, _b2;
+  if (host && host.match(/rarbg/i)) {
+    siteInfo = PT_SITE["www.rarbgmirror.com"];
+  } else {
+    siteInfo = (_b2 = (_a2 = PT_SITE) == null ? void 0 : _a2[host]) != null ? _b2 : "";
+  }
+  var CURRENT_SITE_INFO = siteInfo;
+  var _a3;
+  var CURRENT_SITE_NAME = (_a3 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a3 : "";
   var DOUBAN_API_URL = "https://omit.mkrobot.org/movie/infos";
   var DOUBAN_SEARCH_API = "https://movie.douban.com/j/subject_suggest";
   var PIC_URLS = {
@@ -218,10 +240,10 @@
     const {titleDom} = CURRENT_SITE_INFO;
     const torrentTitle = $(titleDom).text();
     return new Promise((resolve, reject) => {
-      var _a3, _b2;
+      var _a4, _b3;
       const {episode = "", title} = data;
       if (episode) {
-        const seasonNumber = (_b2 = (_a3 = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)) == null ? void 0 : _a3[1]) != null ? _b2 : 1;
+        const seasonNumber = (_b3 = (_a4 = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)) == null ? void 0 : _a4[1]) != null ? _b3 : 1;
         if (parseInt(seasonNumber) === 1) {
           resolve(data);
         } else {
@@ -241,9 +263,9 @@
             method: "GET",
             url: `${DOUBAN_API_URL}/${doubanId}`,
             onload(res) {
-              var _a3;
+              var _a4;
               const data = JSON.parse(res.responseText);
-              if (data && ((_a3 = data.data) == null ? void 0 : _a3.id)) {
+              if (data && ((_a4 = data.data) == null ? void 0 : _a4.id)) {
                 resolve(formatDoubanInfo(data.data));
               } else {
                 console.log("\u8C46\u74E3\u6570\u636E\u83B7\u53D6\u5931\u8D25");
@@ -275,7 +297,7 @@
   var createDoubanDom = (doubanId) => {
     const div = document.createElement("div");
     let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
-    if (siteName === "HDT") {
+    if (siteName.match(/(HDT|RARBG)$/)) {
       insertDomSelector = $(insertDomSelector).parent();
     }
     $(insertDomSelector).before(doubanContainerDom);
@@ -395,6 +417,16 @@
 }
 #douban-wrapper .grid{
     overflow: initial;
+}
+.content-rounded #douban-wrapper div{
+    margin-left: 0;
+}
+#douban-wrapper #content .douban-icon .icon-pt1 {
+    background-image:none;
+}
+#douban-wrapper h2{
+    border:none;
+    background-image: none;
 }
 `);
 

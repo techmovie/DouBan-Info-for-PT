@@ -1,3 +1,17 @@
+## [1.1.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.1...1.1.2) (2021-04-28)
+
+
+### Bug Fixes
+
+* hdb 样式修复 ([fce640f](https://github.com/techmovie/DouBan-Info-for-PT/commit/fce640fda63d21261b058c6797eac02ac8917aaa))
+
+
+### Features
+
+* 支持ragbg ([f390927](https://github.com/techmovie/DouBan-Info-for-PT/commit/f390927c4e31a1fe6db3a2977227c91f47a6d365))
+
+
+
 ## [1.1.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.0...1.1.1) (2021-04-28)
 
 
