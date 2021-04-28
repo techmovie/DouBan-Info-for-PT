@@ -92,4 +92,8 @@ export default GM_addStyle(`
 #douban-wrapper #content .douban-icon .icon-pt1 {
     background-image:none;
 }
+#douban-wrapper h2{
+    border:none;
+    background-image: none;
+}
 `);
