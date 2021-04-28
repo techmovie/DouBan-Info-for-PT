@@ -1,5 +1,5 @@
 import {
-  CURRENT_SITE_INFO,
+  CURRENT_SITE_INFO, PIC_URLS,
   DOUBAN_API_URL, DOUBAN_SEARCH_API,
 } from './const';
 const isChinese = (title) => {
@@ -146,12 +146,6 @@ const formatDoubanInfo = (data) => {
   };
 };
 const createDoubanDom = (doubanId) => {
-  const iframe = document.createElement('iframe');
-  iframe.id = 'doubanIframe';
-  iframe.width = '770';
-  iframe.height = '345';
-  iframe.frameborder = '0';
-  iframe.scrolling = 'no';
   const div = document.createElement('div');
   let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
   if (siteName === 'HDT') {
@@ -163,7 +157,11 @@ const createDoubanDom = (doubanId) => {
     url: `${doubanLink}/output_card`,
     method: 'GET',
     onload (res) {
-      const htmlData = res.responseText.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
+      let htmlData = res.responseText.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
+      htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
+      htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
+      htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
+      htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
 
       let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
       headDom = headDom.replace(/<link.+?>/g, '');
@@ -181,9 +179,6 @@ const createDoubanDom = (doubanId) => {
       });
     },
   });
-  iframe.onload = () => {
-
-  };
 };
 
 export {
