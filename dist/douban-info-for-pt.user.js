@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.2
+// @version      1.1.3
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -62,6 +62,7 @@
       siteName: "FL",
       imdb: '.cblock-innercontent div a[href*="imdb.com/title"]:first',
       poster: 'img[width="300px"][src*="image.tmdb.org"]',
+      titleDom: ".cblock-header h4",
       insertDomSelector: ".cblock-innercontent hr.separator:first",
       doubanContainerDom: '<div class="douban-dom" style="width: 100%;padding-top:20px;"></div>'
     },
@@ -82,6 +83,7 @@
         movie: ".contentlayout h1 a",
         tv: "#details .showlinks li:nth-child(2) a"
       },
+      titleDom: "h1:first",
       insertDomSelector: "#details>tbody>tr:nth-child(2)",
       doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom"></div></td></tr>'
     },
@@ -105,6 +107,7 @@
       host: "privatehd.to'",
       siteName: "PHD",
       imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first',
+      titleDom: ".title .torrent-filename",
       poster: ".movie-poster img",
       insertDomSelector: ".movie-title",
       doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
@@ -124,6 +127,7 @@
       siteName: "RARBG",
       poster: "td.header2:contains(Poster) ~ td img",
       imdb: '.lista a[href*="imdb.com/title"]:first',
+      titleDom: "h1.black",
       insertDomSelector: "td.header2:contains(Poster)",
       doubanContainerDom: '<tr><td align="right" class="header2" valign="top">\u8C46\u74E3</td><td class="lisaa douban-dom"></td></tr>'
     }
@@ -237,8 +241,7 @@
     });
   };
   var getTvSeasonData = (data) => {
-    const {titleDom} = CURRENT_SITE_INFO;
-    const torrentTitle = $(titleDom).text();
+    const torrentTitle = getTorrentTitle();
     return new Promise((resolve, reject) => {
       var _a4, _b3;
       const {episode = "", title} = data;
@@ -294,6 +297,42 @@
       average
     });
   };
+  var getTorrentTitle = () => {
+    let {titleDom} = CURRENT_SITE_INFO;
+    if (!titleDom) {
+      if (CURRENT_SITE_NAME === "BHD") {
+        titleDom = $(".dotborder").find("td:contains(Name)").next("td");
+      } else if (CURRENT_SITE_NAME.match(/ACM|BLU/)) {
+        const keyMap = {
+          Name: "Name",
+          \u540D\u79F0: "Name",
+          \u540D\u7A31: "Name"
+        };
+        $("#vue+.panel table tr").each((index, element) => {
+          const key = $(element).find("td:first").text().replace(/\s|\n/g, "");
+          if (keyMap[key]) {
+            titleDom = $(element).find("td:last");
+          }
+        });
+      } else if (CURRENT_SITE_NAME === "UHD") {
+        const torrentId = getUrlParam("torrentid");
+        const torrentFilePathDom = $(`#files_${torrentId} .filelist_path`);
+        const torrentFileDom = $(`#files_${torrentId} .filelist_table>tbody>tr:nth-child(2) td`).eq(0);
+        titleDom = torrentFilePathDom || torrentFileDom;
+      } else if (CURRENT_SITE_NAME === "HDT") {
+        return document.title.replace(/HD-Torrents.org\s*-/ig, "").trim();
+      }
+    }
+    return $(titleDom).text();
+  };
+  var getUrlParam = (key) => {
+    const reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+    const regArray = location.search.substr(1).match(reg);
+    if (regArray) {
+      return unescape(regArray[2]);
+    }
+    return "";
+  };
   var createDoubanDom = (doubanId) => {
     const div = document.createElement("div");
     let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
@@ -307,6 +346,7 @@
       method: "GET",
       onload(res) {
         let htmlData = res.responseText.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
+        htmlData = htmlData.replace(/(html,)body,/, "$1");
         htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
         htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
         htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
@@ -424,9 +464,11 @@
 #douban-wrapper #content .douban-icon .icon-pt1 {
     background-image:none;
 }
-#douban-wrapper h2{
+#douban-wrapper h2,#douban-wrapper h1{
     border:none;
     background-image: none;
+    background-color: transparent;
+    text-shadow: none;
 }
 `);
 

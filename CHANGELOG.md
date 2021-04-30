@@ -1,3 +1,17 @@
+## [1.1.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.2...1.1.3) (2021-04-30)
+
+
+### Bug Fixes
+
+* 修复HDB部分主题样式 ([16fff6c](https://github.com/techmovie/DouBan-Info-for-PT/commit/16fff6cb7ede65db3dc1d1887052a1c39ec51b7b)), closes [#1](https://github.com/techmovie/DouBan-Info-for-PT/issues/1)
+
+
+### Features
+
+* 剧集显示更准确季数 ([730b734](https://github.com/techmovie/DouBan-Info-for-PT/commit/730b7348749fec1a1d0096e4a6ce783bfcfabc61))
+
+
+
 ## [1.1.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.1...1.1.2) (2021-04-28)
 
 
