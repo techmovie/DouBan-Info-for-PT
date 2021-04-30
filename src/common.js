@@ -193,6 +193,7 @@ const createDoubanDom = (doubanId) => {
     method: 'GET',
     onload (res) {
       let htmlData = res.responseText.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
+      htmlData = htmlData.replace(/(html,)body,/, '$1');// HDB body样式覆盖
       htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
       htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
       htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
