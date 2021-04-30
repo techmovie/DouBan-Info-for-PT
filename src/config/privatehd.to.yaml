@@ -2,6 +2,7 @@ url: 'https://privatehd.to'
 host: privatehd.to'
 siteName: PHD
 imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first'
+titleDom: '.title .torrent-filename'
 poster: '.movie-poster img'
 insertDomSelector: '.movie-title'
 doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'

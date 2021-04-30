@@ -1,6 +1,6 @@
 import {
   CURRENT_SITE_INFO, PIC_URLS,
-  DOUBAN_API_URL, DOUBAN_SEARCH_API,
+  DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME,
 } from './const';
 const isChinese = (title) => {
   return /[\u4e00-\u9fa5]+/.test(title);
@@ -88,8 +88,7 @@ const getDoubanId = (imdbId) => {
   });
 };
 const getTvSeasonData = (data) => {
-  const { titleDom } = CURRENT_SITE_INFO;
-  const torrentTitle = $(titleDom).text();
+  const torrentTitle = getTorrentTitle();
   return new Promise((resolve, reject) => {
     const { episode = '', title } = data;
     if (episode) {
@@ -144,6 +143,42 @@ const formatDoubanInfo = (data) => {
     votes,
     average,
   };
+};
+const getTorrentTitle = () => {
+  let { titleDom } = CURRENT_SITE_INFO;
+  if (!titleDom) {
+    if (CURRENT_SITE_NAME === 'BHD') {
+      titleDom = $('.dotborder').find('td:contains(Name)').next('td');
+    } else if (CURRENT_SITE_NAME.match(/ACM|BLU/)) {
+      const keyMap = {
+        Name: 'Name',
+        名称: 'Name',
+        名稱: 'Name',
+      };
+      $('#vue+.panel table tr').each((index, element) => {
+        const key = $(element).find('td:first').text().replace(/\s|\n/g, '');
+        if (keyMap[key]) {
+          titleDom = $(element).find('td:last');
+        }
+      });
+    } else if (CURRENT_SITE_NAME === 'UHD') {
+      const torrentId = getUrlParam('torrentid');
+      const torrentFilePathDom = $(`#files_${torrentId} .filelist_path`);
+      const torrentFileDom = $(`#files_${torrentId} .filelist_table>tbody>tr:nth-child(2) td`).eq(0);
+      titleDom = torrentFilePathDom || torrentFileDom;
+    } else if (CURRENT_SITE_NAME === 'HDT') {
+      return document.title.replace(/HD-Torrents.org\s*-/ig, '').trim();
+    }
+  }
+  return $(titleDom).text();
+};
+const getUrlParam = (key) => {
+  const reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)');
+  const regArray = location.search.substr(1).match(reg);
+  if (regArray) {
+    return unescape(regArray[2]);
+  }
+  return '';
 };
 const createDoubanDom = (doubanId) => {
   const div = document.createElement('div');
