@@ -1,0 +1,7 @@
+url: https://iptorrents.com
+host: iptorrents.com
+siteName: IPT
+imdb: '.main td a[href*="imdb.com/title"]'
+titleDom: '.dBox h1'
+insertDomSelector: '.dBox .info'
+doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'

@@ -1,0 +1,7 @@
+url: https://broadcasthe.net
+host: broadcasthe.net
+siteName: BTN
+imdb: '.stats td a[href*="imdb.com/title"]'
+insertDomSelector: '#content .linkbox'
+poster: '.sidebar .box img:first'
+doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'

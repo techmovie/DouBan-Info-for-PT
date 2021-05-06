@@ -1,0 +1,8 @@
+url: https://www.torrentleech.org
+host: torrentleech.org
+siteName: IPT
+imdb: '.imdb-info a[href*="imdb.com/title"]'
+titleDom: '#torrentnameid'
+poster: '.imdb_cover img'
+insertDomSelector: '.torrent-info .torrent-info-details'
+doubanContainerDom: '<div class="douban-dom"></div>'

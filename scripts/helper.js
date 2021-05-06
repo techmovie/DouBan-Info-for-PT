@@ -59,6 +59,9 @@ exports.userScriptComment = `// ==UserScript==
 // @match        http://rarbggo.to/torrent/*
 // @match        https://rarbgprx.org/torrent/*
 // @match        https://proxyrarbg.org/torrent/*
+// @match        https://broadcasthe.net/series.php?id=*
+// @match        https://iptorrents.com/torrent.php?id=*
+// @match        https://www.torrentleech.org/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
