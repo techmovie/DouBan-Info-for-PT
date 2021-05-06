@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.3
+// @version      1.1.4
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -20,6 +20,9 @@
 // @match        http://rarbggo.to/torrent/*
 // @match        https://rarbgprx.org/torrent/*
 // @match        https://proxyrarbg.org/torrent/*
+// @match        https://broadcasthe.net/series.php?id=*
+// @match        https://iptorrents.com/torrent.php?id=*
+// @match        https://www.torrentleech.org/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
@@ -56,6 +59,15 @@
       insertDomSelector: "#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1",
       doubanContainerDom: '<div class="douban-dom"></div>'
     },
+    "broadcasthe.net": {
+      url: "https://broadcasthe.net",
+      host: "broadcasthe.net",
+      siteName: "BTN",
+      imdb: '.stats td a[href*="imdb.com/title"]',
+      insertDomSelector: "#content .linkbox",
+      poster: ".sidebar .box img:first",
+      doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
+    },
     "filelist.io": {
       url: "https://filelist.io",
       host: "filelist.io",
@@ -86,6 +98,15 @@
       titleDom: "h1:first",
       insertDomSelector: "#details>tbody>tr:nth-child(2)",
       doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom"></div></td></tr>'
+    },
+    "iptorrents.com": {
+      url: "https://iptorrents.com",
+      host: "iptorrents.com",
+      siteName: "IPT",
+      imdb: '.main td a[href*="imdb.com/title"]',
+      titleDom: ".dBox h1",
+      insertDomSelector: ".dBox .info",
+      doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
     },
     "karagarga.in": {
       url: "https://karagarga.in",
@@ -130,6 +151,16 @@
       titleDom: "h1.black",
       insertDomSelector: "td.header2:contains(Poster)",
       doubanContainerDom: '<tr><td align="right" class="header2" valign="top">\u8C46\u74E3</td><td class="lisaa douban-dom"></td></tr>'
+    },
+    "www.torrentleech.org": {
+      url: "https://www.torrentleech.org",
+      host: "torrentleech.org",
+      siteName: "IPT",
+      imdb: '.imdb-info a[href*="imdb.com/title"]',
+      titleDom: "#torrentnameid",
+      poster: ".imdb_cover img",
+      insertDomSelector: ".torrent-info .torrent-info-details",
+      doubanContainerDom: '<div class="douban-dom"></div>'
     }
   };
 

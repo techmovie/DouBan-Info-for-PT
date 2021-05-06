@@ -1,14 +1,23 @@
+## [1.1.4](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.3...1.1.4) (2021-05-06)
+
+
+### Features
+
+* **new site:** add BTN IPT TL support ([7678cc9](https://github.com/techmovie/DouBan-Info-for-PT/commit/7678cc995fe83405b258a6967b1a51c7db4b536b))
+
+
+
 ## [1.1.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.2...1.1.3) (2021-04-30)
 
 
 ### Bug Fixes
 
-* 修复HDB部分主题样式 ([16fff6c](https://github.com/techmovie/DouBan-Info-for-PT/commit/16fff6cb7ede65db3dc1d1887052a1c39ec51b7b)), closes [#1](https://github.com/techmovie/DouBan-Info-for-PT/issues/1)
+* 修复HDB部分主题样式 ([82070f0](https://github.com/techmovie/DouBan-Info-for-PT/commit/82070f052d02c43bf82f435032aa80c5e7c2287d)), closes [#1](https://github.com/techmovie/DouBan-Info-for-PT/issues/1)
 
 
 ### Features
 
-* 剧集显示更准确季数 ([730b734](https://github.com/techmovie/DouBan-Info-for-PT/commit/730b7348749fec1a1d0096e4a6ce783bfcfabc61))
+* 剧集显示更准确季数 ([e7cde7d](https://github.com/techmovie/DouBan-Info-for-PT/commit/e7cde7dbf6938137105c39c60fb067f356b906fa))
 
 
 
