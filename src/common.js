@@ -27,7 +27,7 @@ const addToPtpPage = (data) => {
     <div><strong>语言:</strong> ${data.language}</div>
     <div><strong>时长:</strong> ${data.runtime}</div>
     <div><strong>又名:</strong>  ${data.aka}</div
-    <div><strong>获奖情况:</strong>  ${data.awards}</div
+    <div><strong>获奖情况:</strong> <br> ${data.awards}</div
     </div>`);
   if (data.average) {
     $('#movie-ratings-table tr').prepend(
@@ -152,7 +152,7 @@ const formatDoubanInfo = (data) => {
     chineseTitle: title,
     votes,
     average,
-    awards: awards?.replace(/\n/g, ' / ') ?? '',
+    awards: awards?.replace(/\n/g, '<br>') ?? '',
   };
 };
 const getTorrentTitle = () => {
