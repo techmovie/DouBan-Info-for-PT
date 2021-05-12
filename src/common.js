@@ -27,6 +27,7 @@ const addToPtpPage = (data) => {
     <div><strong>语言:</strong> ${data.language}</div>
     <div><strong>时长:</strong> ${data.runtime}</div>
     <div><strong>又名:</strong>  ${data.aka}</div
+    <div><strong>获奖情况:</strong>  ${data.awards}</div
     </div>`);
   if (data.average) {
     $('#movie-ratings-table tr').prepend(
@@ -110,11 +111,11 @@ const getDoubanInfo = (doubanId) => {
       if (doubanId) {
         GM_xmlhttpRequest({
           method: 'GET',
-          url: `${DOUBAN_API_URL}/${doubanId}`,
+          url: `${DOUBAN_API_URL}/?sid=${doubanId}&site=douban_movie`,
           onload (res) {
             const data = JSON.parse(res.responseText);
-            if (data && data.data?.id) {
-              resolve(formatDoubanInfo(data.data));
+            if (data && data.success) {
+              resolve(formatDoubanInfo(data));
             } else {
               console.log('豆瓣数据获取失败');
             }
@@ -131,17 +132,27 @@ const getDoubanInfo = (doubanId) => {
 };
 
 const formatDoubanInfo = (data) => {
-  let { title, votes, average, originalTitle } = data;
-  if (originalTitle !== title) {
-    title = title.replace(originalTitle, '').trim();
-  }
+  let {
+    douban_votes: votes, introduction: summary,
+    sid, douban_rating_average: average, chinese_title: title,
+    director, genre, region, language, aka, duration: runtime, awards,
+  } = data;
   votes = votes || '0';
   average = average || '0.0';
+  const link = `https://movie.douban.com/subject/${sid}`;
   return {
-    ...data,
+    director: director.map(item => item.name),
+    runtime,
+    language: language?.join(' / ') ?? '',
+    genre: genre?.join(' / ') ?? '',
+    aka: aka?.join(' / ') ?? '',
+    region: region?.join(' / ') ?? '',
+    link,
+    summary,
     chineseTitle: title,
     votes,
     average,
+    awards: awards?.replace(/\n/g, ' / ') ?? '',
   };
 };
 const getTorrentTitle = () => {

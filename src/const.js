@@ -9,7 +9,7 @@ if (host && host.match(/rarbg/i)) {
 }
 const CURRENT_SITE_INFO = siteInfo;
 const CURRENT_SITE_NAME = CURRENT_SITE_INFO?.siteName ?? '';
-const DOUBAN_API_URL = 'https://omit.mkrobot.org/movie/infos';
+const DOUBAN_API_URL = 'https://media.pttool.workers.dev';
 const DOUBAN_SEARCH_API = 'https://movie.douban.com/j/subject_suggest';
 const PIC_URLS = {
   border: 'https://ptpimg.me/zz4632.png',
