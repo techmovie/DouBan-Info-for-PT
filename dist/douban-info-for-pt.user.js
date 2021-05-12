@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.4
+// @version      1.1.5
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -29,8 +29,6 @@
 // @license      MIT
 // ==/UserScript==
 (() => {
-  var __assign = Object.assign;
-
   // src/config.json
   var PT_SITE = {
     "asiancinema.me": {
@@ -177,7 +175,7 @@
   var CURRENT_SITE_INFO = siteInfo;
   var _a3;
   var CURRENT_SITE_NAME = (_a3 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a3 : "";
-  var DOUBAN_API_URL = "https://omit.mkrobot.org/movie/infos";
+  var DOUBAN_API_URL = "https://media.pttool.workers.dev";
   var DOUBAN_SEARCH_API = "https://movie.douban.com/j/subject_suggest";
   var PIC_URLS = {
     border: "https://ptpimg.me/zz4632.png",
@@ -212,6 +210,7 @@
     <div><strong>\u8BED\u8A00:</strong> ${data.language}</div>
     <div><strong>\u65F6\u957F:</strong> ${data.runtime}</div>
     <div><strong>\u53C8\u540D:</strong>  ${data.aka}</div
+    <div><strong>\u83B7\u5956\u60C5\u51B5:</strong>  ${data.awards}</div
     </div>`);
     if (data.average) {
       $("#movie-ratings-table tr").prepend(`<td colspan="1" style="width: 152px;">
@@ -295,12 +294,11 @@
         if (doubanId) {
           GM_xmlhttpRequest({
             method: "GET",
-            url: `${DOUBAN_API_URL}/${doubanId}`,
+            url: `${DOUBAN_API_URL}/?sid=${doubanId}&site=douban_movie`,
             onload(res) {
-              var _a4;
               const data = JSON.parse(res.responseText);
-              if (data && ((_a4 = data.data) == null ? void 0 : _a4.id)) {
-                resolve(formatDoubanInfo(data.data));
+              if (data && data.success) {
+                resolve(formatDoubanInfo(data));
               } else {
                 console.log("\u8C46\u74E3\u6570\u636E\u83B7\u53D6\u5931\u8D25");
               }
@@ -316,17 +314,38 @@
     });
   };
   var formatDoubanInfo = (data) => {
-    let {title, votes, average, originalTitle} = data;
-    if (originalTitle !== title) {
-      title = title.replace(originalTitle, "").trim();
-    }
+    var _a4, _b3, _c, _d, _e;
+    let {
+      douban_votes: votes,
+      introduction: summary,
+      sid,
+      douban_rating_average: average,
+      chinese_title: title,
+      director,
+      genre,
+      region,
+      language,
+      aka,
+      duration: runtime,
+      awards
+    } = data;
     votes = votes || "0";
     average = average || "0.0";
-    return __assign(__assign({}, data), {
+    const link = `https://movie.douban.com/subject/${sid}`;
+    return {
+      director: director.map((item) => item.name),
+      runtime,
+      language: (_a4 = language == null ? void 0 : language.join(" / ")) != null ? _a4 : "",
+      genre: (_b3 = genre == null ? void 0 : genre.join(" / ")) != null ? _b3 : "",
+      aka: (_c = aka == null ? void 0 : aka.join(" / ")) != null ? _c : "",
+      region: (_d = region == null ? void 0 : region.join(" / ")) != null ? _d : "",
+      link,
+      summary,
       chineseTitle: title,
       votes,
-      average
-    });
+      average,
+      awards: (_e = awards == null ? void 0 : awards.replace(/\n/g, " / ")) != null ? _e : ""
+    };
   };
   var getTorrentTitle = () => {
     let {titleDom} = CURRENT_SITE_INFO;

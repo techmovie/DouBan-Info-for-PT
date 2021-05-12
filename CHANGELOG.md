@@ -1,3 +1,12 @@
+## [1.1.5](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.4...1.1.5) (2021-05-12)
+
+
+### Bug Fixes
+
+* 替换豆瓣接口 ptp增加显示获奖信息 ([379ef30](https://github.com/techmovie/DouBan-Info-for-PT/commit/379ef302322810005bbc2c4f4303e248cd0a81fb))
+
+
+
 ## [1.1.4](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.3...1.1.4) (2021-05-06)
 
 
