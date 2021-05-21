@@ -1,3 +1,12 @@
+## [1.1.6](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.5...1.1.6) (2021-05-21)
+
+
+### Bug Fixes
+
+* 修改获奖情况样式 ([4d84783](https://github.com/techmovie/DouBan-Info-for-PT/commit/4d8478366ad68b21c55a9208bea32c5643074fa7))
+
+
+
 ## [1.1.5](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.4...1.1.5) (2021-05-12)
 
 

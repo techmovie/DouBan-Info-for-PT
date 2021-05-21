@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.5
+// @version      1.1.6
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -210,7 +210,7 @@
     <div><strong>\u8BED\u8A00:</strong> ${data.language}</div>
     <div><strong>\u65F6\u957F:</strong> ${data.runtime}</div>
     <div><strong>\u53C8\u540D:</strong>  ${data.aka}</div
-    <div><strong>\u83B7\u5956\u60C5\u51B5:</strong>  ${data.awards}</div
+    <div><strong>\u83B7\u5956\u60C5\u51B5:</strong> <br> ${data.awards}</div
     </div>`);
     if (data.average) {
       $("#movie-ratings-table tr").prepend(`<td colspan="1" style="width: 152px;">
@@ -344,7 +344,7 @@
       chineseTitle: title,
       votes,
       average,
-      awards: (_e = awards == null ? void 0 : awards.replace(/\n/g, " / ")) != null ? _e : ""
+      awards: (_e = awards == null ? void 0 : awards.replace(/\n/g, "<br>")) != null ? _e : ""
     };
   };
   var getTorrentTitle = () => {
