@@ -143,7 +143,7 @@ const formatDoubanInfo = (data) => {
   return {
     director: director.map(item => item.name),
     runtime,
-    language: language?.join(' / ') ?? '',
+    language: language ? language?.join(' / ') : '',
     genre: genre?.join(' / ') ?? '',
     aka: aka?.join(' / ') ?? '',
     region: region?.join(' / ') ?? '',
