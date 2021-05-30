@@ -1,6 +1,6 @@
-url: https://privatehd.to
-host: privatehd.to
-siteName: PHD
+url: https://avistaz.to
+host: avistaz.to
+siteName: AvistaZ
 imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first'
 titleDom: '.title .torrent-filename'
 poster: '.movie-poster img'

@@ -62,6 +62,7 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://broadcasthe.net/series.php?id=*
 // @match        https://iptorrents.com/torrent.php?id=*
 // @match        https://www.torrentleech.org/torrent/*
+// @match        https://avistaz.to/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
