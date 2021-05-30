@@ -72,15 +72,22 @@ const getImdbId = () => {
 };
 const getDoubanId = (imdbId) => {
   return new Promise((resolve, reject) => {
+    const url = DOUBAN_SEARCH_API.replace('{query}', imdbId);
     GM_xmlhttpRequest({
       method: 'GET',
-      url: `${DOUBAN_SEARCH_API}?q=${imdbId}`,
+      url,
       onload (res) {
         try {
-          const data = JSON.parse(res.responseText);
-          if (data.length > 0) {
-            resolve(data[0]);
-          }
+          const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+          const linkDom = doc.querySelector('.result-list .result h3 a');
+          const { href, textContent } = linkDom;
+          const season = textContent.match(/第(.+?)季/)?.[1] ?? '';
+          const doubanId = decodeURIComponent(href).match(/subject\/(\d+)/)?.[1];
+          resolve({
+            id: doubanId,
+            season,
+            title: textContent,
+          });
         } catch (error) {
           console.log(error);
         }
