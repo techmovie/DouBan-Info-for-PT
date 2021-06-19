@@ -10,8 +10,8 @@ import './style.js';
   if (CURRENT_SITE_INFO) {
     const imdbId = getImdbId();
     const movieData = await getDoubanId(imdbId);
-    let { id, episode = '' } = movieData;
-    if (episode) {
+    let { id, season = '' } = movieData;
+    if (season) {
       const tvData = await getTvSeasonData(movieData);
       id = tvData.id;
     }

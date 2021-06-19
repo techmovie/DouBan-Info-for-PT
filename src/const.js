@@ -9,7 +9,7 @@ if (host && host.match(/rarbg/i)) {
 }
 const CURRENT_SITE_INFO = siteInfo;
 const CURRENT_SITE_NAME = CURRENT_SITE_INFO?.siteName ?? '';
-const DOUBAN_API_URL = 'https://media.pttool.workers.dev';
+const DOUBAN_API_URL = 'https://movie.douban.com/subject/{doubanId}';
 const DOUBAN_SEARCH_API = 'https://www.douban.com/search?cat=1002&q={query}';
 const PIC_URLS = {
   border: 'https://ptpimg.me/zz4632.png',

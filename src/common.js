@@ -70,36 +70,31 @@ const getImdbId = () => {
   console.log(imdbLink);
   return /tt\d+/.exec(imdbLink)[0];
 };
-const getDoubanId = (imdbId) => {
-  return new Promise((resolve, reject) => {
+const getDoubanId = async (imdbId) => {
+  try {
     const url = DOUBAN_SEARCH_API.replace('{query}', imdbId);
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url,
-      onload (res) {
-        try {
-          const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
-          const linkDom = doc.querySelector('.result-list .result h3 a');
-          const { href, textContent } = linkDom;
-          const season = textContent.match(/第(.+?)季/)?.[1] ?? '';
-          const doubanId = decodeURIComponent(href).match(/subject\/(\d+)/)?.[1];
-          resolve({
-            id: doubanId,
-            season,
-            title: textContent,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      },
+    const res = await fetch(url, {
+      responseType: 'text',
     });
-  });
+    const doc = new DOMParser().parseFromString(res, 'text/html');
+    const linkDom = doc.querySelector('.result-list .result h3 a');
+    const { href, textContent } = linkDom;
+    const season = textContent.match(/第(.+?)季/)?.[1] ?? '';
+    const doubanId = decodeURIComponent(href).match(/subject\/(\d+)/)?.[1];
+    return {
+      id: doubanId,
+      season,
+      title: textContent,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
 const getTvSeasonData = (data) => {
   const torrentTitle = getTorrentTitle();
   return new Promise((resolve, reject) => {
-    const { episode = '', title } = data;
-    if (episode) {
+    const { season = '', title } = data;
+    if (season) {
       const seasonNumber = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
       if (parseInt(seasonNumber) === 1) {
         resolve(data);
@@ -112,53 +107,76 @@ const getTvSeasonData = (data) => {
     }
   });
 };
-const getDoubanInfo = (doubanId) => {
-  return new Promise((resolve, reject) => {
-    try {
-      if (doubanId) {
-        GM_xmlhttpRequest({
-          method: 'GET',
-          url: `${DOUBAN_API_URL}/?sid=${doubanId}&site=douban_movie`,
-          onload (res) {
-            const data = JSON.parse(res.responseText);
-            if (data && data.success) {
-              resolve(formatDoubanInfo(data));
-            } else {
-              console.log('豆瓣数据获取失败');
-            }
-          },
-        });
-      } else {
-        reject(new Error('豆瓣链接获取失败'));
-      }
-    } catch (error) {
-      console.log(error);
-      reject(new Error(error.message));
+const getDoubanInfo = async (doubanId) => {
+  try {
+    const url = DOUBAN_API_URL.replace('{doubanId}', doubanId);
+    const data = await fetch(url, {
+      responseType: 'text',
+    });
+    if (data) {
+      return await formatDoubanInfo(data);
+    } else {
+      console.log('豆瓣数据获取失败');
     }
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
-
-const formatDoubanInfo = (data) => {
-  let {
-    douban_votes: votes, introduction: summary,
-    sid, douban_rating_average: average, chinese_title: title,
-    director, genre, region, language, aka, duration: runtime, awards,
-  } = data;
-  votes = votes || '0';
-  average = average || '0.0';
-  const link = `https://movie.douban.com/subject/${sid}`;
+const formatDoubanInfo = async (domString) => {
+  const dom = new DOMParser().parseFromString(domString, 'text/html');
+  const chineseTitle = $('title', dom).text().replace('(豆瓣)', '').trim();
+  const jsonData = JSON.parse($('head > script[type="application/ld+json"]', dom).html().replace(/(\r\n|\n|\r|\t)/gm, ''));
+  const fetchAnchor = function (anchor) {
+    return anchor[0].nextSibling.nodeValue.trim();
+  };
+  const rating = jsonData.aggregateRating ? jsonData.aggregateRating.ratingValue : 0;
+  const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;
+  const director = jsonData.director ? jsonData.director : [];
+  const link = `https://movie.douban.com${jsonData.url}`;
+  const introductionDom = $('#link-report > span.all.hidden, #link-report > [property="v:summary"]', dom);
+  const summary = (
+    introductionDom.length > 0 ? introductionDom.text() : '暂无相关剧情介绍'
+  ).split('\n').map(a => a.trim()).filter(a => a.length > 0).join('\n'); // 处理简介缩进
+  const genre = $('#info span[property="v:genre"]', dom).map(function () { // 类别
+    return $(this).text().trim();
+  }).toArray(); // 类别
+  const language = fetchAnchor($('#info span.pl:contains("语言")', dom));
+  const region = fetchAnchor($('#info span.pl:contains("制片国家/地区")', dom)); // 产地
+  const runtimeAnchor = $('#info span.pl:contains("单集片长")', dom);
+  const runtime = runtimeAnchor[0] ? fetchAnchor(runtimeAnchor) : $('#info span[property="v:runtime"]', dom).text().trim();
+  const akaAnchor = $('#info span.pl:contains("又名")', dom);
+  let aka = '';
+  if (akaAnchor.length > 0) {
+    aka = fetchAnchor(akaAnchor).split(' / ').sort(function (a, b) { // 首字(母)排序
+      return a.localeCompare(b);
+    }).join('/');
+    aka = aka.split('/');
+  }
+  const awardsPage = await fetch(`${link}/awards`, {
+    responseType: 'text',
+  });
+  const awardsDoc = new DOMParser().parseFromString(awardsPage, 'text/html');
+  const awards = $('#content > div > div.article', awardsDoc).html()
+    .replace(/[ \n]/g, '')
+    .replace(/<\/li><li>/g, '</li> <li>')
+    .replace(/<\/a><span/g, '</a> <span')
+    .replace(/<(div|ul)[^>]*>/g, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/ +\n/g, '\n')
+    .trim(); ;
   return {
     director: director.map(item => item.name),
     runtime,
-    language: language ? language?.join(' / ') : '',
+    language,
     genre: genre?.join(' / ') ?? '',
     aka: aka?.join(' / ') ?? '',
-    region: region?.join(' / ') ?? '',
+    region,
     link,
     summary,
-    chineseTitle: title,
+    chineseTitle,
     votes,
-    average,
+    average: rating,
     awards: awards?.replace(/\n/g, '<br>') ?? '',
   };
 };
@@ -234,7 +252,30 @@ const createDoubanDom = (doubanId) => {
     },
   });
 };
-
+function fetch (url, options = {}) {
+  return new Promise((resolve, reject) => {
+    GM_xmlhttpRequest({
+      method: 'GET',
+      url,
+      responseType: 'json',
+      ...options,
+      onload: (res) => {
+        const { statusText, status, response } = res;
+        if (status !== 200) {
+          reject(new Error(statusText || status));
+        } else {
+          resolve(response);
+        }
+      },
+      ontimeout: () => {
+        reject(new Error('timeout'));
+      },
+      onerror: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
 export {
   isChinese,
   getImdbId,
