@@ -1,3 +1,18 @@
+## [1.1.7](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.6...1.1.7) (2021-06-19)
+
+
+### Bug Fixes
+
+* 豆瓣信息获取改为直接请求豆瓣链接 ([06b8bec](https://github.com/techmovie/DouBan-Info-for-PT/commit/06b8bec4cf14daddaebf20efefaf33b644243b08))
+
+
+### Features
+
+* **new site:** add  avz support ([a775647](https://github.com/techmovie/DouBan-Info-for-PT/commit/a7756470c659f7e85239b6ff2e1744c2b4a6becf))
+* 替换imdb获取豆瓣id接口 ([e829394](https://github.com/techmovie/DouBan-Info-for-PT/commit/e829394c3d99ee8b40dc2f1cf458598f24ef58fa))
+
+
+
 ## [1.1.6](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.5...1.1.6) (2021-05-21)
 
 
