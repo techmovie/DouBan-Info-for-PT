@@ -3,4 +3,4 @@ host: karagarga.in
 siteName: KG
 imdb: 'td a[href*="imdb.com/title"]:first'
 insertDomSelector: '.outer h1~table:first'
-doubanContainerDom: '<div class="douban-dom kg" style="width:770px;padding-top:20px;"></div>'
+doubanContainerDom: '<div class="douban-dom kg" style="width:1100px;padding-top:20px;"></div>'

@@ -98,4 +98,59 @@ export default GM_addStyle(`
     background-color: transparent;
     text-shadow: none;
 }
+#douban-wrapper .grid-col5 {
+    font-size: 14px;
+    padding: 27px 14px 0 12px;
+    width: 190px;
+    overflow-y: auto;
+    height: 277px;
+    width: calc(100% - 225px - 254px - 36px - 280px);
+}
+
+#douban-wrapper .summary{
+    padding-top: 10px;
+    color: #000000;
+    line-height: 25px;
+    letter-spacing: 1px;
+    word-break: break-all;
+    font-weight: 400;
+}
+#douban-wrapper {
+    width: 100% !important;
+}
+.douban-dom>div{
+    width: 100%;
+}
+#douban-wrapper #content{
+    background-image:none !important;
+    background: #fff;
+    width: calc(100% - 20px) !important;
+}
+#douban-wrapper #content .grid{
+    width: 100% !important;
+}
+.bhd #douban-wrapper ::-webkit-scrollbar-track{
+    background-color: #fff;
+}
+.bhd #douban-wrapper ::-webkit-scrollbar-thumb{
+    background-color: #ddd;
+}
+.btn #douban-wrapper .grid-col1 {
+    display: none;
+}
+.hdb #douban-wrapper .grid-col1 {
+    display: none;
+}
+.hdt #douban-wrapper .grid-col1 {
+    display: none;
+}
+.btn #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.hdt #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.hdb #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
 `);

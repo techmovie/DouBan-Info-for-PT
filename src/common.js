@@ -132,6 +132,9 @@ const formatDoubanInfo = async (domString) => {
   const rating = jsonData.aggregateRating ? jsonData.aggregateRating.ratingValue : 0;
   const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;
   const director = jsonData.director ? jsonData.director : [];
+  const poster = jsonData.image
+    .replace(/s(_ratio_poster|pic)/g, 'l$1')
+    .replace(/img\d/, 'img9');
   const link = `https://movie.douban.com${jsonData.url}`;
   const introductionDom = $('#link-report > span.all.hidden, #link-report > [property="v:summary"]', dom);
   const summary = (
@@ -145,7 +148,7 @@ const formatDoubanInfo = async (domString) => {
   const runtimeAnchor = $('#info span.pl:contains("单集片长")', dom);
   const runtime = runtimeAnchor[0] ? fetchAnchor(runtimeAnchor) : $('#info span[property="v:runtime"]', dom).text().trim();
   const akaAnchor = $('#info span.pl:contains("又名")', dom);
-  let aka = '';
+  let aka = [];
   if (akaAnchor.length > 0) {
     aka = fetchAnchor(akaAnchor).split(' / ').sort(function (a, b) { // 首字(母)排序
       return a.localeCompare(b);
@@ -164,7 +167,7 @@ const formatDoubanInfo = async (domString) => {
     .replace(/<[^>]+>/g, '')
     .replace(/&nbsp;/g, ' ')
     .replace(/ +\n/g, '\n')
-    .trim(); ;
+    .trim();
   return {
     director: director.map(item => item.name),
     runtime,
@@ -173,6 +176,7 @@ const formatDoubanInfo = async (domString) => {
     aka: aka?.join(' / ') ?? '',
     region,
     link,
+    poster,
     summary,
     chineseTitle,
     votes,
@@ -216,40 +220,45 @@ const getUrlParam = (key) => {
   }
   return '';
 };
-const createDoubanDom = (doubanId) => {
+const createDoubanDom = async (doubanId) => {
   const div = document.createElement('div');
-  let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
+  let { doubanContainerDom, insertDomSelector, siteName } = CURRENT_SITE_INFO;
   if (siteName.match(/(HDT|RARBG)$/)) {
     insertDomSelector = $(insertDomSelector).parent();
   }
   $(insertDomSelector).before(doubanContainerDom);
   const doubanLink = `https://movie.douban.com/subject/${doubanId}`;
-  GM_xmlhttpRequest({
-    url: `${doubanLink}/output_card`,
-    method: 'GET',
-    onload (res) {
-      let htmlData = res.responseText.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
-      htmlData = htmlData.replace(/(html,)body,/, '$1');// HDB body样式覆盖
-      htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
-      htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
-      htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
-      htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
 
-      let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
-      headDom = headDom.replace(/<link.+?>/g, '');
-      const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
-      div.insertAdjacentHTML('beforeend', headDom);
-      div.insertAdjacentHTML('beforeend', bodyDom);
-      $('.douban-dom').append(div).attr('douban-link', doubanLink);
-      if ($(poster).attr('src')) {
-        let posterStyle = $('.picture-douban-wrapper').attr('style');
-        posterStyle = posterStyle.replace(/\(.+\)/, `(${$(poster).attr('src')})`);
-        $('.picture-douban-wrapper').attr('style', posterStyle);
-      }
-      $('.douban-dom').click(() => {
-        GM_openInTab(doubanLink);
-      });
-    },
+  let htmlData = await fetch(`${doubanLink}/output_card`, {
+    responseType: 'text',
+  });
+  htmlData = htmlData.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
+  htmlData = htmlData.replace(/(html,)body,/, '$1');// HDB body样式覆盖
+  htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
+  htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
+  htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
+  htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
+  let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
+  headDom = headDom.replace(/<link.+?>/g, '');
+  const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
+  div.insertAdjacentHTML('beforeend', headDom);
+  div.insertAdjacentHTML('beforeend', bodyDom);
+  $('.douban-dom').append(div).attr('douban-link', doubanLink);
+  $('.douban-dom .grid-col4').after(`
+  <div class="fix-col grid-col3">
+  <div class="line-wrap">
+    <img src="https://ptpimg.me/e11hb1.png">
+  </div>
+  </div>
+  <div class="fix-col grid-col5"></div>`);
+  getDoubanInfo(doubanId).then(doubanData => {
+    $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
+    let posterStyle = $('.picture-douban-wrapper').attr('style');
+    posterStyle = posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+    $('.picture-douban-wrapper').attr('style', posterStyle);
+  });
+  $('.douban-dom').click(() => {
+    GM_openInTab(doubanLink);
   });
 };
 function fetch (url, options = {}) {

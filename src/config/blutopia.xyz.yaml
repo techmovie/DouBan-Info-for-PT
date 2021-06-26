@@ -1,7 +1,7 @@
 url: 'https://blutopia.xyz'
 host: blutopia.xyz
 siteName: BLU
-poster: 'img.movie-poster'
+poster: '#meta-poster'
 imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)'
-insertDomSelector: '#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1'
-doubanContainerDom: '<div class="douban-dom"></div>'
+insertDomSelector: '.torrent-buttons'
+doubanContainerDom: '<div class="movie-wrapper"><div class="movie-overlay" style="background-color: rgba(81, 51, 40, 0.75);"></div><div class="douban-dom" style="position: relative;z-index: 2;"></div></div>'

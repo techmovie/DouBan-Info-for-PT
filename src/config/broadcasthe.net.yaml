@@ -4,4 +4,4 @@ siteName: BTN
 imdb: '.stats td a[href*="imdb.com/title"]'
 insertDomSelector: '#content .linkbox'
 poster: '.sidebar .box img:first'
-doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
+doubanContainerDom: '<div class="douban-dom btn" style="display:flex;justify-content: center;width: 850px;margin-left: -20px;"></div>'

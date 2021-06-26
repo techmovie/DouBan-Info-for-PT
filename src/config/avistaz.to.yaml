@@ -4,5 +4,5 @@ siteName: AvistaZ
 imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first'
 titleDom: '.title .torrent-filename'
 poster: '.movie-poster img'
-insertDomSelector: '.movie-title'
+insertDomSelector: '.movie-poster'
 doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
