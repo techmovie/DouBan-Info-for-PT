@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.7...1.2.0) (2021-06-26)
+
+
+### Features
+
+* 支持显示豆瓣简介 ([d967b5d](https://github.com/techmovie/DouBan-Info-for-PT/commit/d967b5d5b92aee727deb637e6b5055c536848851))
+
+
+
 ## [1.1.7](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.6...1.1.7) (2021-06-19)
 
 

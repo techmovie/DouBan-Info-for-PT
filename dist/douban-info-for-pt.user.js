@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.1.7
+// @version      1.2.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -40,8 +40,8 @@
       siteName: "ACM",
       poster: "img.movie-poster",
       imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
-      insertDomSelector: "#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1",
-      doubanContainerDom: '<div class="douban-dom"></div>'
+      insertDomSelector: "#vue",
+      doubanContainerDom: '<div class="douban-dom" style="width: 1100px;"></div>'
     },
     "avistaz.to": {
       url: "https://avistaz.to",
@@ -50,7 +50,7 @@
       imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first',
       titleDom: ".title .torrent-filename",
       poster: ".movie-poster img",
-      insertDomSelector: ".movie-title",
+      insertDomSelector: ".movie-poster",
       doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
     },
     "beyond-hd.me": {
@@ -58,17 +58,17 @@
       host: "beyond-hd.me",
       siteName: "BHD",
       imdb: '.badge-meta a[href*="imdb.com/title"]:nth-child(1)',
-      insertDomSelector: ".movie-wrapper .movie-heading",
-      doubanContainerDom: '<div class="douban-dom"></div>'
+      insertDomSelector: ".movie-wrapper",
+      doubanContainerDom: '<div class="douban-dom bhd"></div>'
     },
     "blutopia.xyz": {
       url: "https://blutopia.xyz",
       host: "blutopia.xyz",
       siteName: "BLU",
-      poster: "img.movie-poster",
+      poster: "#meta-poster",
       imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
-      insertDomSelector: "#main-content .box:first .movie-wrapper .movie-row .movie-heading-box h1",
-      doubanContainerDom: '<div class="douban-dom"></div>'
+      insertDomSelector: ".torrent-buttons",
+      doubanContainerDom: '<div class="movie-wrapper"><div class="movie-overlay" style="background-color: rgba(81, 51, 40, 0.75);"></div><div class="douban-dom" style="position: relative;z-index: 2;"></div></div>'
     },
     "broadcasthe.net": {
       url: "https://broadcasthe.net",
@@ -77,7 +77,7 @@
       imdb: '.stats td a[href*="imdb.com/title"]',
       insertDomSelector: "#content .linkbox",
       poster: ".sidebar .box img:first",
-      doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
+      doubanContainerDom: '<div class="douban-dom btn" style="display:flex;justify-content: center;width: 850px;margin-left: -20px;"></div>'
     },
     "filelist.io": {
       url: "https://filelist.io",
@@ -96,7 +96,7 @@
       poster: "#IMDBDetailsInfoHideShowTR .imdbnew a img",
       imdb: '.imdbnew2 a[href*="imdb.com/title"]:first',
       insertDomSelector: "td.detailsleft:contains(IMDb)",
-      doubanContainerDom: '<tr><td align="left" class="detailsleft">\u8C46\u74E3</td><td valign="top" align="left" class="detailshash douban-dom"></td></tr>'
+      doubanContainerDom: '<tr><td align="left" class="detailsleft">\u8C46\u74E3</td><td valign="top" align="left" class="detailshash douban-dom hdt"></td></tr>'
     },
     "hdbits.org": {
       url: "https://hdbits.org",
@@ -108,7 +108,7 @@
       },
       titleDom: "h1:first",
       insertDomSelector: "#details>tbody>tr:nth-child(2)",
-      doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom"></div></td></tr>'
+      doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom hdb"></div></td></tr>'
     },
     "iptorrents.com": {
       url: "https://iptorrents.com",
@@ -125,7 +125,7 @@
       siteName: "KG",
       imdb: 'td a[href*="imdb.com/title"]:first',
       insertDomSelector: ".outer h1~table:first",
-      doubanContainerDom: '<div class="douban-dom kg" style="width:770px;padding-top:20px;"></div>'
+      doubanContainerDom: '<div class="douban-dom kg" style="width:1100px;padding-top:20px;"></div>'
     },
     "passthepopcorn.me": {
       url: "https://passthepopcorn.me",
@@ -141,7 +141,7 @@
       imdb: '.movie-details .badge-extra a[href*="imdb.com/title"]:first',
       titleDom: ".title .torrent-filename",
       poster: ".movie-poster img",
-      insertDomSelector: ".movie-title",
+      insertDomSelector: ".movie-poster",
       doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
     },
     "uhdbits.org": {
@@ -330,6 +330,7 @@
     const rating = jsonData.aggregateRating ? jsonData.aggregateRating.ratingValue : 0;
     const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;
     const director = jsonData.director ? jsonData.director : [];
+    const poster = jsonData.image.replace(/s(_ratio_poster|pic)/g, "l$1").replace(/img\d/, "img9");
     const link = `https://movie.douban.com${jsonData.url}`;
     const introductionDom = $('#link-report > span.all.hidden, #link-report > [property="v:summary"]', dom);
     const summary = (introductionDom.length > 0 ? introductionDom.text() : "\u6682\u65E0\u76F8\u5173\u5267\u60C5\u4ECB\u7ECD").split("\n").map((a) => a.trim()).filter((a) => a.length > 0).join("\n");
@@ -341,7 +342,7 @@
     const runtimeAnchor = $('#info span.pl:contains("\u5355\u96C6\u7247\u957F")', dom);
     const runtime = runtimeAnchor[0] ? fetchAnchor(runtimeAnchor) : $('#info span[property="v:runtime"]', dom).text().trim();
     const akaAnchor = $('#info span.pl:contains("\u53C8\u540D")', dom);
-    let aka = "";
+    let aka = [];
     if (akaAnchor.length > 0) {
       aka = fetchAnchor(akaAnchor).split(" / ").sort(function(a, b) {
         return a.localeCompare(b);
@@ -353,7 +354,6 @@
     });
     const awardsDoc = new DOMParser().parseFromString(awardsPage, "text/html");
     const awards = $("#content > div > div.article", awardsDoc).html().replace(/[ \n]/g, "").replace(/<\/li><li>/g, "</li> <li>").replace(/<\/a><span/g, "</a> <span").replace(/<(div|ul)[^>]*>/g, "\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/ +\n/g, "\n").trim();
-    ;
     return {
       director: director.map((item) => item.name),
       runtime,
@@ -362,6 +362,7 @@
       aka: (_b3 = aka == null ? void 0 : aka.join(" / ")) != null ? _b3 : "",
       region,
       link,
+      poster,
       summary,
       chineseTitle,
       votes,
@@ -405,39 +406,44 @@
     }
     return "";
   };
-  var createDoubanDom = (doubanId) => {
+  var createDoubanDom = async (doubanId) => {
     const div = document.createElement("div");
-    let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
+    let {doubanContainerDom, insertDomSelector, siteName} = CURRENT_SITE_INFO;
     if (siteName.match(/(HDT|RARBG)$/)) {
       insertDomSelector = $(insertDomSelector).parent();
     }
     $(insertDomSelector).before(doubanContainerDom);
     const doubanLink = `https://movie.douban.com/subject/${doubanId}`;
-    GM_xmlhttpRequest({
-      url: `${doubanLink}/output_card`,
-      method: "GET",
-      onload(res) {
-        let htmlData = res.responseText.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
-        htmlData = htmlData.replace(/(html,)body,/, "$1");
-        htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
-        htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
-        htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
-        htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
-        let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
-        headDom = headDom.replace(/<link.+?>/g, "");
-        const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
-        div.insertAdjacentHTML("beforeend", headDom);
-        div.insertAdjacentHTML("beforeend", bodyDom);
-        $(".douban-dom").append(div).attr("douban-link", doubanLink);
-        if ($(poster).attr("src")) {
-          let posterStyle = $(".picture-douban-wrapper").attr("style");
-          posterStyle = posterStyle.replace(/\(.+\)/, `(${$(poster).attr("src")})`);
-          $(".picture-douban-wrapper").attr("style", posterStyle);
-        }
-        $(".douban-dom").click(() => {
-          GM_openInTab(doubanLink);
-        });
-      }
+    let htmlData = await fetch(`${doubanLink}/output_card`, {
+      responseType: "text"
+    });
+    htmlData = htmlData.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
+    htmlData = htmlData.replace(/(html,)body,/, "$1");
+    htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
+    htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
+    htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
+    htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
+    let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
+    headDom = headDom.replace(/<link.+?>/g, "");
+    const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
+    div.insertAdjacentHTML("beforeend", headDom);
+    div.insertAdjacentHTML("beforeend", bodyDom);
+    $(".douban-dom").append(div).attr("douban-link", doubanLink);
+    $(".douban-dom .grid-col4").after(`
+  <div class="fix-col grid-col3">
+  <div class="line-wrap">
+    <img src="https://ptpimg.me/e11hb1.png">
+  </div>
+  </div>
+  <div class="fix-col grid-col5"></div>`);
+    getDoubanInfo(doubanId).then((doubanData) => {
+      $(".douban-dom .grid-col5").html(`<div class="summary">${doubanData.summary || "\u6682\u65E0\u7B80\u4ECB"}</div>`);
+      let posterStyle = $(".picture-douban-wrapper").attr("style");
+      posterStyle = posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+      $(".picture-douban-wrapper").attr("style", posterStyle);
+    });
+    $(".douban-dom").click(() => {
+      GM_openInTab(doubanLink);
     });
   };
   function fetch(url, options = {}) {
@@ -565,6 +571,61 @@
     background-image: none;
     background-color: transparent;
     text-shadow: none;
+}
+#douban-wrapper .grid-col5 {
+    font-size: 14px;
+    padding: 27px 14px 0 12px;
+    width: 190px;
+    overflow-y: auto;
+    height: 277px;
+    width: calc(100% - 225px - 254px - 36px - 280px);
+}
+
+#douban-wrapper .summary{
+    padding-top: 10px;
+    color: #000000;
+    line-height: 25px;
+    letter-spacing: 1px;
+    word-break: break-all;
+    font-weight: 400;
+}
+#douban-wrapper {
+    width: 100% !important;
+}
+.douban-dom>div{
+    width: 100%;
+}
+#douban-wrapper #content{
+    background-image:none !important;
+    background: #fff;
+    width: calc(100% - 20px) !important;
+}
+#douban-wrapper #content .grid{
+    width: 100% !important;
+}
+.bhd #douban-wrapper ::-webkit-scrollbar-track{
+    background-color: #fff;
+}
+.bhd #douban-wrapper ::-webkit-scrollbar-thumb{
+    background-color: #ddd;
+}
+.btn #douban-wrapper .grid-col1 {
+    display: none;
+}
+.hdb #douban-wrapper .grid-col1 {
+    display: none;
+}
+.hdt #douban-wrapper .grid-col1 {
+    display: none;
+}
+.btn #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.hdt #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.hdb #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
 }
 `);
 
