@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.2.0
+// @version      1.3.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        https://passthepopcorn.me/torrents.php?id=*
 // @match        https://beyond-hd.me/torrents/*
+// @match        https://beyond-hd.me/library/title/*
 // @match        https://blutopia.xyz/torrents/*
 // @match        https://asiancinema.me/torrents/*
 // @match        https://hdbits.org/details.php?id=*
@@ -24,6 +25,11 @@
 // @match        https://iptorrents.com/torrent.php?id=*
 // @match        https://www.torrentleech.org/torrent/*
 // @match        https://avistaz.to/torrent/*
+// @match        https://secret-cinema.pw/torrents.php?id=*
+// @match        https://aither.cc/torrents/*
+// @match        http://shadowthein.net/details.php?id=*
+// @match        https://shadowthein.net/details.php?id=*
+// @match        https://baconbits.org/torrents.php?id=*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
@@ -34,6 +40,15 @@
 
   // src/config.json
   var PT_SITE = {
+    "aither.cc": {
+      url: "https://aither.cc",
+      host: "aither.cc",
+      siteName: "Aither",
+      poster: "#meta-poster",
+      imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
+      insertDomSelector: ".torrent-buttons",
+      doubanContainerDom: '<div class="movie-wrapper"><div class="movie-overlay" style="background-color: rgba(81, 51, 40, 0.75);"></div><div class="douban-dom" style="position: relative;z-index: 2;"></div></div>'
+    },
     "asiancinema.me": {
       url: "https://asiancinema.me",
       host: "asiancinema.me",
@@ -52,6 +67,15 @@
       poster: ".movie-poster img",
       insertDomSelector: ".movie-poster",
       doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
+    },
+    "baconbits.org": {
+      url: "https://baconbits.org",
+      host: "baconbits.org",
+      siteName: "bB",
+      imdb: '.box .body a[href*="imdb.com/title"]:first',
+      insertDomSelector: ".linkbox:first",
+      titleDom: "h1:first",
+      doubanContainerDom: '<div class="douban-dom bb"></div>'
     },
     "beyond-hd.me": {
       url: "https://beyond-hd.me",
@@ -144,6 +168,23 @@
       insertDomSelector: ".movie-poster",
       doubanContainerDom: '<div class="douban-dom" style="justify-content: flex-start;"></div>'
     },
+    "secret-cinema.pw": {
+      url: "https://secret-cinema.pw",
+      host: "secret-cinema.pw",
+      siteName: "SC",
+      imdb: '.torrent_row a[href*="imdb.com/title"]:first',
+      insertDomSelector: ".linkbox:first",
+      doubanContainerDom: '<div class="douban-dom sc"></div>'
+    },
+    "shadowthein.net": {
+      url: "http://shadowthein.net",
+      host: "shadowthein.net",
+      siteName: "iTS",
+      imdb: '.IMDBtable a[href*="imdb.com/title"]:first',
+      insertDomSelector: "h1+table.line",
+      titleDom: "h1:first",
+      doubanContainerDom: '<div class="douban-dom its"></div>'
+    },
     "uhdbits.org": {
       url: "https://uhdbits.org",
       host: "uhdbits.org",
@@ -198,14 +239,9 @@
   };
 
   // src/common.js
-  var isChinese = (title) => {
-    return /[\u4e00-\u9fa5]+/.test(title);
-  };
   var addToPtpPage = (data) => {
     console.log(data);
-    if (isChinese(data.chineseTitle)) {
-      $(".page__title").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
-    }
+    $(".page__title").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
     if (data.summary) {
       const synopsisDom = $("#synopsis-and-trailer").clone().attr("id", "");
       synopsisDom.find("#toggletrailer").empty();
@@ -325,7 +361,8 @@
     const chineseTitle = $("title", dom).text().replace("(\u8C46\u74E3)", "").trim();
     const jsonData = JSON.parse($('head > script[type="application/ld+json"]', dom).html().replace(/(\r\n|\n|\r|\t)/gm, ""));
     const fetchAnchor = function(anchor) {
-      return anchor[0].nextSibling.nodeValue.trim();
+      var _a5, _b4, _c2, _d;
+      return (_d = (_c2 = (_b4 = (_a5 = anchor == null ? void 0 : anchor[0]) == null ? void 0 : _a5.nextSibling) == null ? void 0 : _b4.nodeValue) == null ? void 0 : _c2.trim()) != null ? _d : "";
     };
     const rating = jsonData.aggregateRating ? jsonData.aggregateRating.ratingValue : 0;
     const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;
@@ -618,6 +655,15 @@
 .hdt #douban-wrapper .grid-col1 {
     display: none;
 }
+.sc #douban-wrapper .grid-col1 {
+    display: none;
+}
+.its #douban-wrapper .grid-col1 {
+    display: none;
+}
+.bb #douban-wrapper .grid-col1 {
+    display: none;
+}
 .btn #douban-wrapper .grid-col5 {
     width: calc(100% - 254px - 36px - 280px);
 }
@@ -626,6 +672,19 @@
 }
 .hdb #douban-wrapper .grid-col5 {
     width: calc(100% - 254px - 36px - 280px);
+}
+.sc #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.its #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.bb #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.its #douban-wrapper {
+    background-color: #131313;
+    color: #fff;
 }
 `);
 

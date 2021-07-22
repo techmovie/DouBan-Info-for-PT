@@ -1,3 +1,18 @@
+# [1.3.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.2.0...1.3.0) (2021-07-22)
+
+
+### Bug Fixes
+
+* 适配BHD library页 ([bb92591](https://github.com/techmovie/DouBan-Info-for-PT/commit/bb92591fdf0c9c10790b1df005b7a0de72519d9d))
+
+
+### Features
+
+* **new site:** aither bB iTS SC ([308d224](https://github.com/techmovie/DouBan-Info-for-PT/commit/308d22453553f07ad1167f9fdcbe42dcba21f95f))
+* **ptp:** 显示非中文标题 ([6a981ec](https://github.com/techmovie/DouBan-Info-for-PT/commit/6a981ecbbf77ce674ad9c75231d4ad02b7df72fd))
+
+
+
 # [1.2.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.1.7...1.2.0) (2021-06-26)
 
 
