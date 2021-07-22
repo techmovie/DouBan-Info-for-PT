@@ -4,7 +4,7 @@
 
 为国外PT站增加中文信息，数据源来自于豆瓣。
 
-目前支持`PTP` `BTN` `HDB` `KG` `BHD` `UHD` `FL` `PHD` `BLU` `ACM` `HDT` `IPT` `TL` `RARBG`.
+目前支持`PTP` `BTN` `HDB` `KG` `BHD` `UHD` `FL` `PHD` `BLU` `ACM` `HDT` `IPT` `TL` `RARBG` `Aither` `AvistaZ` `bB` `iTS` `SC`.
 
 ## 安装
 

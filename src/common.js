@@ -127,7 +127,7 @@ const formatDoubanInfo = async (domString) => {
   const chineseTitle = $('title', dom).text().replace('(豆瓣)', '').trim();
   const jsonData = JSON.parse($('head > script[type="application/ld+json"]', dom).html().replace(/(\r\n|\n|\r|\t)/gm, ''));
   const fetchAnchor = function (anchor) {
-    return anchor[0].nextSibling.nodeValue.trim();
+    return anchor?.[0]?.nextSibling?.nodeValue?.trim() ?? '';
   };
   const rating = jsonData.aggregateRating ? jsonData.aggregateRating.ratingValue : 0;
   const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;

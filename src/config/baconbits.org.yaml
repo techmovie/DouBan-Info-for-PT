@@ -1,0 +1,7 @@
+url: https://baconbits.org
+host: baconbits.org
+siteName: bB
+imdb: '.box .body a[href*="imdb.com/title"]:first'
+insertDomSelector: '.linkbox:first'
+titleDom: h1:first
+doubanContainerDom: '<div class="douban-dom bb"></div>'

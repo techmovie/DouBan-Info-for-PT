@@ -1,0 +1,7 @@
+url: http://shadowthein.net
+host: shadowthein.net
+siteName: iTS
+imdb: '.IMDBtable a[href*="imdb.com/title"]:first'
+insertDomSelector: 'h1+table.line'
+titleDom: h1:first
+doubanContainerDom: '<div class="douban-dom its"></div>'

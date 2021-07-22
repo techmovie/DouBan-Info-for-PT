@@ -64,6 +64,11 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://iptorrents.com/torrent.php?id=*
 // @match        https://www.torrentleech.org/torrent/*
 // @match        https://avistaz.to/torrent/*
+// @match        https://secret-cinema.pw/torrents.php?id=*
+// @match        https://aither.cc/torrents/*
+// @match        http://shadowthein.net/details.php?id=*
+// @match        https://shadowthein.net/details.php?id=*
+// @match        https://baconbits.org/torrents.php?id=*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab

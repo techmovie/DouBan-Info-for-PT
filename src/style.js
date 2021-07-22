@@ -144,6 +144,15 @@ export default GM_addStyle(`
 .hdt #douban-wrapper .grid-col1 {
     display: none;
 }
+.sc #douban-wrapper .grid-col1 {
+    display: none;
+}
+.its #douban-wrapper .grid-col1 {
+    display: none;
+}
+.bb #douban-wrapper .grid-col1 {
+    display: none;
+}
 .btn #douban-wrapper .grid-col5 {
     width: calc(100% - 254px - 36px - 280px);
 }
@@ -152,5 +161,18 @@ export default GM_addStyle(`
 }
 .hdb #douban-wrapper .grid-col5 {
     width: calc(100% - 254px - 36px - 280px);
+}
+.sc #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.its #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.bb #douban-wrapper .grid-col5 {
+    width: calc(100% - 254px - 36px - 280px);
+}
+.its #douban-wrapper {
+    background-color: #131313;
+    color: #fff;
 }
 `);
