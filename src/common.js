@@ -7,9 +7,7 @@ const isChinese = (title) => {
 };
 const addToPtpPage = (data) => {
   console.log(data);
-  if (isChinese(data.chineseTitle)) {
-    $('.page__title').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
-  }
+  $('.page__title').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
   if (data.summary) {
     const synopsisDom = $('#synopsis-and-trailer').clone().attr('id', '');
     synopsisDom.find('#toggletrailer').empty();
