@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.0...1.3.1) (2021-07-30)
+
+
+### Bug Fixes
+
+* bhd imdb选择器修复 ([eac3449](https://github.com/techmovie/DouBan-Info-for-PT/commit/eac34493572479fe6b338d8f7d6c3bf6e724f075))
+
+
+
 # [1.3.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.2.0...1.3.0) (2021-07-22)
 
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.3.0
+// @version      1.3.1
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -81,7 +81,7 @@
       url: "https://beyond-hd.me",
       host: "beyond-hd.me",
       siteName: "BHD",
-      imdb: '.badge-meta a[href*="imdb.com/title"]:nth-child(1)',
+      imdb: '.movie-details a[href*="imdb.com/title"]:nth-child(1)',
       insertDomSelector: ".movie-wrapper",
       doubanContainerDom: '<div class="douban-dom bhd"></div>'
     },
