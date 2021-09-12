@@ -4,6 +4,8 @@ const host = location.host;
 let siteInfo = PT_SITE?.[host] ?? '';
 if (host && host.match(/rarbg/i)) {
   siteInfo = PT_SITE['www.rarbgmirror.com'];
+} else if (host && host.match(/iptorrents/i)) {
+  siteInfo = PT_SITE['iptorrents.com'];
 } else {
   siteInfo = PT_SITE?.[host] ?? '';
 }

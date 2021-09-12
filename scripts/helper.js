@@ -62,6 +62,7 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://proxyrarbg.org/torrent/*
 // @match        https://broadcasthe.net/series.php?id=*
 // @match        https://iptorrents.com/torrent.php?id=*
+// @match        https://www.iptorrents.com/torrent.php?id=*
 // @match        https://www.torrentleech.org/torrent/*
 // @match        https://avistaz.to/torrent/*
 // @match        https://secret-cinema.pw/torrents.php?id=*
