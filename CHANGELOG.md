@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.1...1.3.2) (2021-09-12)
+
+
+### Bug Fixes
+
+* **ipt:** adapt another host ([0b09b2c](https://github.com/techmovie/DouBan-Info-for-PT/commit/0b09b2c2c31f0fe657452d86678bbb61d9358f2c)), closes [#3](https://github.com/techmovie/DouBan-Info-for-PT/issues/3)
+
+
+
 ## [1.3.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.0...1.3.1) (2021-07-30)
 
 

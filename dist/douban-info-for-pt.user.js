@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.3.1
+// @version      1.3.2
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -23,6 +23,7 @@
 // @match        https://proxyrarbg.org/torrent/*
 // @match        https://broadcasthe.net/series.php?id=*
 // @match        https://iptorrents.com/torrent.php?id=*
+// @match        https://www.iptorrents.com/torrent.php?id=*
 // @match        https://www.torrentleech.org/torrent/*
 // @match        https://avistaz.to/torrent/*
 // @match        https://secret-cinema.pw/torrents.php?id=*
@@ -223,6 +224,8 @@
   var _a2, _b2;
   if (host && host.match(/rarbg/i)) {
     siteInfo = PT_SITE["www.rarbgmirror.com"];
+  } else if (host && host.match(/iptorrents/i)) {
+    siteInfo = PT_SITE["iptorrents.com"];
   } else {
     siteInfo = (_b2 = (_a2 = PT_SITE) == null ? void 0 : _a2[host]) != null ? _b2 : "";
   }
