@@ -66,24 +66,22 @@ const getImdbId = () => {
     imdbLink = $(imdbConfig).attr('href');
   }
   console.log(imdbLink);
-  return /tt\d+/.exec(imdbLink)[0];
+  return /tt\d+/.exec(imdbLink)?.[0] ?? '';
 };
 const getDoubanId = async (imdbId) => {
   try {
     const url = DOUBAN_SEARCH_API.replace('{query}', imdbId);
     const res = await fetch(url, {
-      responseType: 'text',
+      responseType: 'json',
     });
-    const doc = new DOMParser().parseFromString(res, 'text/html');
-    const linkDom = doc.querySelector('.result-list .result h3 a');
-    const { href, textContent } = linkDom;
-    const season = textContent.match(/第(.+?)季/)?.[1] ?? '';
-    const doubanId = decodeURIComponent(href).match(/subject\/(\d+)/)?.[1];
-    return {
-      id: doubanId,
-      season,
-      title: textContent,
-    };
+    if (res && res.length > 0 && res[0].id) {
+      const { id, title, episode } = res[0];
+      return {
+        id,
+        season: episode,
+        title,
+      };
+    }
   } catch (error) {
     console.log(error);
   }
