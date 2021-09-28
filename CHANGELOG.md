@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.2...1.3.3) (2021-09-28)
+
+
+### Bug Fixes
+
+* imdb检索改用豆瓣官方接口 ([9eca1c6](https://github.com/techmovie/DouBan-Info-for-PT/commit/9eca1c6324f501adb23e1a3dab523a864f588008)), closes [#4](https://github.com/techmovie/DouBan-Info-for-PT/issues/4)
+
+
+
 ## [1.3.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.1...1.3.2) (2021-09-12)
 
 

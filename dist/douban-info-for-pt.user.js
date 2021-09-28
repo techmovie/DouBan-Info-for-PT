@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.3.2
+// @version      1.3.3
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -233,7 +233,7 @@
   var _a3;
   var CURRENT_SITE_NAME = (_a3 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a3 : "";
   var DOUBAN_API_URL = "https://movie.douban.com/subject/{doubanId}";
-  var DOUBAN_SEARCH_API = "https://www.douban.com/search?cat=1002&q={query}";
+  var DOUBAN_SEARCH_API = "https://movie.douban.com/j/subject_suggest?q={query}";
   var PIC_URLS = {
     border: "https://ptpimg.me/zz4632.png",
     icon2x: "https://ptpimg.me/n74cjc.png",
@@ -283,6 +283,7 @@
     }
   };
   var getImdbId = () => {
+    var _a4, _b3;
     let imdbLink = "";
     const imdbConfig = CURRENT_SITE_INFO.imdb;
     if (typeof imdbConfig === "object") {
@@ -302,25 +303,22 @@
       imdbLink = $(imdbConfig).attr("href");
     }
     console.log(imdbLink);
-    return /tt\d+/.exec(imdbLink)[0];
+    return (_b3 = (_a4 = /tt\d+/.exec(imdbLink)) == null ? void 0 : _a4[0]) != null ? _b3 : "";
   };
   var getDoubanId = async (imdbId) => {
-    var _a4, _b3, _c;
     try {
       const url = DOUBAN_SEARCH_API.replace("{query}", imdbId);
       const res = await fetch(url, {
-        responseType: "text"
+        responseType: "json"
       });
-      const doc = new DOMParser().parseFromString(res, "text/html");
-      const linkDom = doc.querySelector(".result-list .result h3 a");
-      const {href, textContent} = linkDom;
-      const season = (_b3 = (_a4 = textContent.match(/第(.+?)季/)) == null ? void 0 : _a4[1]) != null ? _b3 : "";
-      const doubanId = (_c = decodeURIComponent(href).match(/subject\/(\d+)/)) == null ? void 0 : _c[1];
-      return {
-        id: doubanId,
-        season,
-        title: textContent
-      };
+      if (res && res.length > 0 && res[0].id) {
+        const {id, title, episode} = res[0];
+        return {
+          id,
+          season: episode,
+          title
+        };
+      }
     } catch (error) {
       console.log(error);
     }
