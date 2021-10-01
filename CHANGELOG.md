@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.3...1.4.0) (2021-10-01)
+
+
+### Features
+
+* **ptp:** 增加request页支持 ([a596e9f](https://github.com/techmovie/DouBan-Info-for-PT/commit/a596e9fce5f19b56b70d84e9bc108788c49438ff)), closes [#5](https://github.com/techmovie/DouBan-Info-for-PT/issues/5)
+
+
+
 ## [1.3.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.2...1.3.3) (2021-09-28)
 
 

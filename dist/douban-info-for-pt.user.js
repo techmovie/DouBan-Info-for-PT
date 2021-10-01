@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.3.3
+// @version      1.4.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        https://passthepopcorn.me/torrents.php?id=*
+// @match        https://passthepopcorn.me/requests.php?action=view&id=*
 // @match        https://beyond-hd.me/torrents/*
 // @match        https://beyond-hd.me/library/title/*
 // @match        https://blutopia.xyz/torrents/*
@@ -157,7 +158,10 @@
       host: "passthepopcorn.me",
       siteName: "PTP",
       siteType: "gazelle",
-      imdb: "#imdb-title-link"
+      imdb: {
+        request: '#request-table a[href*="imdb.com/title"]:first',
+        torrent: "#imdb-title-link"
+      }
     },
     "privatehd.to": {
       url: "https://privatehd.to",
@@ -246,11 +250,14 @@
     console.log(data);
     $(".page__title").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
     if (data.summary) {
-      const synopsisDom = $("#synopsis-and-trailer").clone().attr("id", "");
-      synopsisDom.find("#toggletrailer").empty();
-      synopsisDom.find(".panel__heading__title").text("\u4E2D\u6587\u7B80\u4ECB");
-      synopsisDom.find("#synopsis").text(data.summary).attr("id", "");
-      $("#synopsis-and-trailer").after(synopsisDom);
+      const synopsisDom = `
+    <div class="panel" id="douban-synopsis">
+    <div class="panel__heading"><span class="panel__heading__title">\u4E2D\u6587\u7B80\u4ECB</span></div>
+    <div class="panel__body">
+          <div id="synopsis">${data.summary}</div>
+    </div>
+    </div>`;
+      $("#synopsis-and-trailer,#request-table").after(synopsisDom);
     }
     $("#movieinfo").before(`
     <div class="panel">
@@ -693,6 +700,9 @@
   (async () => {
     if (CURRENT_SITE_INFO) {
       const imdbId = getImdbId();
+      if (!imdbId) {
+        return;
+      }
       const movieData = await getDoubanId(imdbId);
       let {id, season = ""} = movieData;
       if (season) {
