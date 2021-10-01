@@ -45,6 +45,7 @@ exports.userScriptComment = `// ==UserScript==
 // @author       ${author}
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        https://passthepopcorn.me/torrents.php?id=*
+// @match        https://passthepopcorn.me/requests.php?action=view&id=*
 // @match        https://beyond-hd.me/torrents/*
 // @match        https://beyond-hd.me/library/title/*
 // @match        https://blutopia.xyz/torrents/*

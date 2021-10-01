@@ -2,4 +2,6 @@ url: 'https://passthepopcorn.me'
 host: passthepopcorn.me
 siteName: PTP
 siteType: gazelle
-imdb: '#imdb-title-link'
+imdb: 
+  request: '#request-table a[href*="imdb.com/title"]:first'
+  torrent: '#imdb-title-link'

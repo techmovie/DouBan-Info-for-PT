@@ -9,11 +9,14 @@ const addToPtpPage = (data) => {
   console.log(data);
   $('.page__title').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
   if (data.summary) {
-    const synopsisDom = $('#synopsis-and-trailer').clone().attr('id', '');
-    synopsisDom.find('#toggletrailer').empty();
-    synopsisDom.find('.panel__heading__title').text('中文简介');
-    synopsisDom.find('#synopsis').text(data.summary).attr('id', '');
-    $('#synopsis-and-trailer').after(synopsisDom);
+    const synopsisDom = `
+    <div class="panel" id="douban-synopsis">
+    <div class="panel__heading"><span class="panel__heading__title">中文简介</span></div>
+    <div class="panel__body">
+          <div id="synopsis">${data.summary}</div>
+    </div>
+    </div>`;
+    $('#synopsis-and-trailer,#request-table').after(synopsisDom);
   }
   $('#movieinfo').before(`
     <div class="panel">

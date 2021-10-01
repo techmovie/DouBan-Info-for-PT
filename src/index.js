@@ -9,6 +9,9 @@ import './style.js';
 (async () => {
   if (CURRENT_SITE_INFO) {
     const imdbId = getImdbId();
+    if (!imdbId) {
+      return;
+    }
     const movieData = await getDoubanId(imdbId);
     let { id, season = '' } = movieData;
     if (season) {
