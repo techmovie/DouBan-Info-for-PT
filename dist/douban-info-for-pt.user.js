@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.4.0
+// @version      1.4.1
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -12,6 +12,7 @@
 // @match        https://blutopia.xyz/torrents/*
 // @match        https://asiancinema.me/torrents/*
 // @match        https://hdbits.org/details.php?id=*
+// @match        https://hdbits.org/requests/show_request?id=*
 // @match        https://uhdbits.org/torrents.php?id=*
 // @match        https://filelist.io/details.php?id=*
 // @match        https://hd-torrents.org/details.php?id=*
@@ -130,10 +131,11 @@
       siteName: "HDB",
       imdb: {
         movie: ".contentlayout h1 a",
-        tv: "#details .showlinks li:nth-child(2) a"
+        tv: "#details .showlinks li:nth-child(2) a",
+        tvRequest: ".lottery_table2 .showlinks li:nth-child(2) a"
       },
       titleDom: "h1:first",
-      insertDomSelector: "#details>tbody>tr:nth-child(2)",
+      insertDomSelector: "#details>tbody>tr:nth-child(2),.lottery_table2>tbody>tr:nth-child(1)",
       doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>\u8C46\u74E3\u4FE1\u606F</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom hdb"></div></td></tr>'
     },
     "iptorrents.com": {
@@ -484,7 +486,7 @@
     getDoubanInfo(doubanId).then((doubanData) => {
       $(".douban-dom .grid-col5").html(`<div class="summary">${doubanData.summary || "\u6682\u65E0\u7B80\u4ECB"}</div>`);
       let posterStyle = $(".picture-douban-wrapper").attr("style");
-      posterStyle = posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+      posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
       $(".picture-douban-wrapper").attr("style", posterStyle);
     });
     $(".douban-dom").click(() => {
@@ -704,7 +706,7 @@
         return;
       }
       const movieData = await getDoubanId(imdbId);
-      let {id, season = ""} = movieData;
+      let {id = "", season = ""} = movieData;
       if (season) {
         const tvData = await getTvSeasonData(movieData);
         id = tvData.id;

@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.4.0...1.4.1) (2022-01-23)
+
+
+### Features
+
+* 支持HDB request页面 ([4153253](https://github.com/techmovie/DouBan-Info-for-PT/commit/4153253b737a15be9a8e65733bee97898b7eb524)), closes [#8](https://github.com/techmovie/DouBan-Info-for-PT/issues/8)
+
+
+
 # [1.4.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.3.3...1.4.0) (2021-10-01)
 
 
