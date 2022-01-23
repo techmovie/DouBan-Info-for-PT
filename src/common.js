@@ -253,7 +253,7 @@ const createDoubanDom = async (doubanId) => {
   getDoubanInfo(doubanId).then(doubanData => {
     $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
     let posterStyle = $('.picture-douban-wrapper').attr('style');
-    posterStyle = posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+    posterStyle = posterStyle?.replace(/\(.+\)/, `(${doubanData.poster})`);
     $('.picture-douban-wrapper').attr('style', posterStyle);
   });
   $('.douban-dom').click(() => {

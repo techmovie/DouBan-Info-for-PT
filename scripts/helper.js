@@ -51,6 +51,7 @@ exports.userScriptComment = `// ==UserScript==
 // @match        https://blutopia.xyz/torrents/*
 // @match        https://asiancinema.me/torrents/*
 // @match        https://hdbits.org/details.php?id=*
+// @match        https://hdbits.org/requests/show_request?id=*
 // @match        https://uhdbits.org/torrents.php?id=*
 // @match        https://filelist.io/details.php?id=*
 // @match        https://hd-torrents.org/details.php?id=*

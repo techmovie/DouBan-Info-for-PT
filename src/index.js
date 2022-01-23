@@ -13,7 +13,7 @@ import './style.js';
       return;
     }
     const movieData = await getDoubanId(imdbId);
-    let { id, season = '' } = movieData;
+    let { id = '', season = '' } = movieData;
     if (season) {
       const tvData = await getTvSeasonData(movieData);
       id = tvData.id;
