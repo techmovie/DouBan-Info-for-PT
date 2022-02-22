@@ -1,6 +1,6 @@
 {
   "name": "douban-info-for-pt",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "在PT站电影详情页展示部分中文信息",
   "main": "index.js",
   "repository": "git@github.com:techmovie/DouBan-Info-for-PT.git",
