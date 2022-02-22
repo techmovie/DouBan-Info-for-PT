@@ -106,14 +106,21 @@ const getTvSeasonData = (data) => {
     }
   });
 };
-const getDoubanInfo = async (doubanId) => {
+const getDoubanInfo = async (doubanId, imdbId) => {
   try {
     const url = DOUBAN_API_URL.replace('{doubanId}', doubanId);
     const data = await fetch(url, {
       responseType: 'text',
     });
     if (data) {
-      return await formatDoubanInfo(data);
+      const doubanInfo = await formatDoubanInfo(data);
+      const savedIds = GM_getValue('ids') || {};
+      savedIds[imdbId] = {
+        doubanId,
+        ...doubanInfo,
+      };
+      GM_setValue('ids', savedIds);
+      return doubanInfo;
     } else {
       console.log('豆瓣数据获取失败');
     }
@@ -219,7 +226,7 @@ const getUrlParam = (key) => {
   }
   return '';
 };
-const createDoubanDom = async (doubanId) => {
+const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   const div = document.createElement('div');
   let { doubanContainerDom, insertDomSelector, siteName } = CURRENT_SITE_INFO;
   if (siteName.match(/(HDT|RARBG)$/)) {
@@ -250,12 +257,11 @@ const createDoubanDom = async (doubanId) => {
   </div>
   </div>
   <div class="fix-col grid-col5"></div>`);
-  getDoubanInfo(doubanId).then(doubanData => {
-    $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
-    let posterStyle = $('.picture-douban-wrapper').attr('style');
-    posterStyle = posterStyle?.replace(/\(.+\)/, `(${doubanData.poster})`);
-    $('.picture-douban-wrapper').attr('style', posterStyle);
-  });
+  const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
+  $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
+  let posterStyle = $('.picture-douban-wrapper').attr('style');
+  posterStyle = posterStyle?.replace(/\(.+\)/, `(${doubanData.poster})`);
+  $('.picture-douban-wrapper').attr('style', posterStyle);
   $('.douban-dom').click(() => {
     GM_openInTab(doubanLink);
   });

@@ -12,18 +12,37 @@ import './style.js';
     if (!imdbId) {
       return;
     }
-    const movieData = await getDoubanId(imdbId);
-    let { id = '', season = '' } = movieData;
-    if (season) {
-      const tvData = await getTvSeasonData(movieData);
-      id = tvData.id;
-    }
-    if (CURRENT_SITE_NAME === 'PTP') {
-      getDoubanInfo(id).then(doubanData => {
-        addToPtpPage(doubanData);
-      });
-    } else {
-      createDoubanDom(id);
+    try {
+      const savedIds = GM_getValue('ids') || {};
+      if (!savedIds[imdbId]) {
+        let doubanId = '';
+        const movieData = await getDoubanId(imdbId);
+        if (!movieData) {
+          throw new Error('没有找到豆瓣条目');
+        }
+        const { id = '', season = '' } = movieData;
+        doubanId = id;
+        if (season) {
+          const tvData = await getTvSeasonData(movieData);
+          doubanId = tvData.id;
+        }
+        if (CURRENT_SITE_NAME === 'PTP') {
+          getDoubanInfo(doubanId, imdbId).then(doubanData => {
+            addToPtpPage(doubanData);
+          });
+        } else {
+          createDoubanDom(doubanId, imdbId);
+        }
+      } else {
+        const savedData = savedIds[imdbId];
+        if (CURRENT_SITE_NAME === 'PTP') {
+          addToPtpPage(savedData);
+        } else {
+          createDoubanDom(savedData.doubanId, imdbId, savedData);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 })();
