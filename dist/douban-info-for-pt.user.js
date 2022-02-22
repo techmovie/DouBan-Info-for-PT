@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.4.1
+// @version      1.5.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -350,14 +350,20 @@
       }
     });
   };
-  var getDoubanInfo = async (doubanId) => {
+  var getDoubanInfo = async (doubanId, imdbId) => {
     try {
       const url = DOUBAN_API_URL.replace("{doubanId}", doubanId);
       const data = await fetch(url, {
         responseType: "text"
       });
       if (data) {
-        return await formatDoubanInfo(data);
+        const doubanInfo = await formatDoubanInfo(data);
+        const savedIds = GM_getValue("ids") || {};
+        savedIds[imdbId] = __assign({
+          doubanId
+        }, doubanInfo);
+        GM_setValue("ids", savedIds);
+        return doubanInfo;
       } else {
         console.log("\u8C46\u74E3\u6570\u636E\u83B7\u53D6\u5931\u8D25");
       }
@@ -453,7 +459,7 @@
     }
     return "";
   };
-  var createDoubanDom = async (doubanId) => {
+  var createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
     const div = document.createElement("div");
     let {doubanContainerDom, insertDomSelector, siteName} = CURRENT_SITE_INFO;
     if (siteName.match(/(HDT|RARBG)$/)) {
@@ -483,12 +489,11 @@
   </div>
   </div>
   <div class="fix-col grid-col5"></div>`);
-    getDoubanInfo(doubanId).then((doubanData) => {
-      $(".douban-dom .grid-col5").html(`<div class="summary">${doubanData.summary || "\u6682\u65E0\u7B80\u4ECB"}</div>`);
-      let posterStyle = $(".picture-douban-wrapper").attr("style");
-      posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
-      $(".picture-douban-wrapper").attr("style", posterStyle);
-    });
+    const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
+    $(".douban-dom .grid-col5").html(`<div class="summary">${doubanData.summary || "\u6682\u65E0\u7B80\u4ECB"}</div>`);
+    let posterStyle = $(".picture-douban-wrapper").attr("style");
+    posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+    $(".picture-douban-wrapper").attr("style", posterStyle);
     $(".douban-dom").click(() => {
       GM_openInTab(doubanLink);
     });
@@ -705,18 +710,37 @@
       if (!imdbId) {
         return;
       }
-      const movieData = await getDoubanId(imdbId);
-      let {id = "", season = ""} = movieData;
-      if (season) {
-        const tvData = await getTvSeasonData(movieData);
-        id = tvData.id;
-      }
-      if (CURRENT_SITE_NAME === "PTP") {
-        getDoubanInfo(id).then((doubanData) => {
-          addToPtpPage(doubanData);
-        });
-      } else {
-        createDoubanDom(id);
+      try {
+        const savedIds = GM_getValue("ids") || {};
+        if (!savedIds[imdbId]) {
+          let doubanId = "";
+          const movieData = await getDoubanId(imdbId);
+          if (!movieData) {
+            throw new Error("\u6CA1\u6709\u627E\u5230\u8C46\u74E3\u6761\u76EE");
+          }
+          const {id = "", season = ""} = movieData;
+          doubanId = id;
+          if (season) {
+            const tvData = await getTvSeasonData(movieData);
+            doubanId = tvData.id;
+          }
+          if (CURRENT_SITE_NAME === "PTP") {
+            getDoubanInfo(doubanId, imdbId).then((doubanData) => {
+              addToPtpPage(doubanData);
+            });
+          } else {
+            createDoubanDom(doubanId, imdbId);
+          }
+        } else {
+          const savedData = savedIds[imdbId];
+          if (CURRENT_SITE_NAME === "PTP") {
+            addToPtpPage(savedData);
+          } else {
+            createDoubanDom(savedData.doubanId, imdbId, savedData);
+          }
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   })();
