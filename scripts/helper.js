@@ -75,6 +75,8 @@ exports.userScriptComment = `// ==UserScript==
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @license      MIT
 // ==/UserScript==`;
 
