@@ -1,0 +1,8 @@
+url: https://broadcity.in
+host: broadcity.in
+siteName: Bdc
+imdb: '#imdbdetails a[href*="imdb.com/title"]'
+titleDom: '#details>table>tbody>tr:first'
+insertDomSelector: '#imdbdetails'
+poster: '#ts_show_preview img'
+doubanContainerDom: '<div class="douban-dom bdc" style="display:flex;justify-content: center;"></div>'
