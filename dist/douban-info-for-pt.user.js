@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.5.0
+// @version      1.6.0
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -33,9 +33,12 @@
 // @match        http://shadowthein.net/details.php?id=*
 // @match        https://shadowthein.net/details.php?id=*
 // @match        https://baconbits.org/torrents.php?id=*
+// @match        https://broadcity.in/details.php?id=*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @license      MIT
 // ==/UserScript==
 (() => {
@@ -105,6 +108,16 @@
       insertDomSelector: "#content .linkbox",
       poster: ".sidebar .box img:first",
       doubanContainerDom: '<div class="douban-dom btn" style="display:flex;justify-content: center;width: 850px;margin-left: -20px;"></div>'
+    },
+    "broadcity.in": {
+      url: "https://broadcity.in",
+      host: "broadcity.in",
+      siteName: "Bdc",
+      imdb: '#imdbdetails a[href*="imdb.com/title"]',
+      titleDom: "#details>table>tbody>tr:first",
+      insertDomSelector: "#imdbdetails",
+      poster: "#ts_show_preview img",
+      doubanContainerDom: '<div class="douban-dom bdc" style="display:flex;justify-content: center;"></div>'
     },
     "filelist.io": {
       url: "https://filelist.io",

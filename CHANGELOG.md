@@ -1,3 +1,17 @@
+# [1.6.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.5.0...1.6.0) (2022-02-27)
+
+
+### Bug Fixes
+
+* add [@grant](https://github.com/grant) ([89dc341](https://github.com/techmovie/DouBan-Info-for-PT/commit/89dc341f1c2668a0eae1dc20a014fe64ff852d85))
+
+
+### Features
+
+* **new site:** support Bdc ([be7148d](https://github.com/techmovie/DouBan-Info-for-PT/commit/be7148d8f125b274763c988ed7ce4f45aa01f6f9))
+
+
+
 # [1.5.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.4.1...1.5.0) (2022-02-22)
 
 
