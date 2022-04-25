@@ -228,7 +228,7 @@ const getUrlParam = (key) => {
 };
 const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   const div = document.createElement('div');
-  let { doubanContainerDom, insertDomSelector, siteName } = CURRENT_SITE_INFO;
+  let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
   if (siteName.match(/(HDT|RARBG)$/)) {
     insertDomSelector = $(insertDomSelector).parent();
   }
@@ -260,7 +260,8 @@ const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
   $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
   let posterStyle = $('.picture-douban-wrapper').attr('style');
-  posterStyle = posterStyle?.replace(/\(.+\)/, `(${doubanData.poster})`);
+  const posterImg = siteName === 'MTV' ? $(poster).attr('src') : doubanData.poster;
+  posterStyle = posterStyle?.replace(/\(.+\)/, `(${posterImg})`);
   $('.picture-douban-wrapper').attr('style', posterStyle);
   $('.douban-dom').click(() => {
     GM_openInTab(doubanLink);

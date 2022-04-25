@@ -1,0 +1,8 @@
+url: www.morethantv.me
+host: morethantv.me
+siteName: MTV
+imdb: '.metalinks a[href*="imdb.com/title"]'
+insertDomSelector: '#content>.thin>div:first'
+poster: '.sidebar img:first'
+titleDom: '.details h2'
+doubanContainerDom: '<div class="douban-dom mtv"></div>'
