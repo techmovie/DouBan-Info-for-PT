@@ -1,3 +1,12 @@
+## [1.6.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.0...1.6.1) (2022-04-25)
+
+
+### Features
+
+* **new site:** support MTV ([cef8679](https://github.com/techmovie/DouBan-Info-for-PT/commit/cef8679e616a326a6b2a04575e21b8a112f0ac10))
+
+
+
 # [1.6.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.5.0...1.6.0) (2022-02-27)
 
 

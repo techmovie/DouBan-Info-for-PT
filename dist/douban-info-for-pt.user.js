@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.6.0
+// @version      1.6.1
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -33,7 +33,8 @@
 // @match        http://shadowthein.net/details.php?id=*
 // @match        https://shadowthein.net/details.php?id=*
 // @match        https://baconbits.org/torrents.php?id=*
-// @match        https://broadcity.in/details.php?id=*
+// @match        https://www.morethantv.me/torrents.php?id=*
+// @match        https://www.morethantv.me/show/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
@@ -213,6 +214,16 @@
       poster: ".poster_box .imgbox img",
       insertDomSelector: "div.head:contains(IMDB)",
       doubanContainerDom: '<div class="box"><div class="head"><a href="#">\u2191</a>&nbsp;<strong>\u8C46\u74E3</strong></div><div class="body douban-dom"></div></div>'
+    },
+    "www.morethantv.me": {
+      url: "www.morethantv.me",
+      host: "morethantv.me",
+      siteName: "MTV",
+      imdb: '.metalinks a[href*="imdb.com/title"]',
+      insertDomSelector: "#content>.thin>div:first",
+      poster: ".sidebar img:first",
+      titleDom: ".details h2",
+      doubanContainerDom: '<div class="douban-dom mtv"></div>'
     },
     "www.rarbgmirror.com": {
       url: "https://www.rarbgmirror.com",
@@ -474,7 +485,7 @@
   };
   var createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
     const div = document.createElement("div");
-    let {doubanContainerDom, insertDomSelector, siteName} = CURRENT_SITE_INFO;
+    let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
     if (siteName.match(/(HDT|RARBG)$/)) {
       insertDomSelector = $(insertDomSelector).parent();
     }
@@ -505,7 +516,8 @@
     const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
     $(".douban-dom .grid-col5").html(`<div class="summary">${doubanData.summary || "\u6682\u65E0\u7B80\u4ECB"}</div>`);
     let posterStyle = $(".picture-douban-wrapper").attr("style");
-    posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${doubanData.poster})`);
+    const posterImg = siteName === "MTV" ? $(poster).attr("src") : doubanData.poster;
+    posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${posterImg})`);
     $(".picture-douban-wrapper").attr("style", posterStyle);
     $(".douban-dom").click(() => {
       GM_openInTab(doubanLink);
