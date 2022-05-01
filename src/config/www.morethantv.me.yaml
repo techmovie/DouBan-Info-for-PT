@@ -4,5 +4,5 @@ siteName: MTV
 imdb: '.metalinks a[href*="imdb.com/title"]'
 insertDomSelector: '#content>.thin>div:first'
 poster: '.sidebar img:first'
-titleDom: '.details h2'
+titleDom: '.details h2:first'
 doubanContainerDom: '<div class="douban-dom mtv"></div>'

@@ -72,6 +72,7 @@ exports.userScriptComment = `// ==UserScript==
 // @match        http://shadowthein.net/details.php?id=*
 // @match        https://shadowthein.net/details.php?id=*
 // @match        https://baconbits.org/torrents.php?id=*
+// @match        https://broadcity.in/details.php?id=*
 // @match        https://www.morethantv.me/torrents.php?id=*
 // @match        https://www.morethantv.me/show/*
 // @grant        GM_addStyle

@@ -94,7 +94,7 @@ const getTvSeasonData = (data) => {
   return new Promise((resolve, reject) => {
     const { season = '', title } = data;
     if (season) {
-      const seasonNumber = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
+      const seasonNumber = torrentTitle.match(/S(?!eason)\s*?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
       if (parseInt(seasonNumber) === 1) {
         resolve(data);
       } else {
