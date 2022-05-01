@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.6.1
+// @version      1.6.2
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -33,6 +33,7 @@
 // @match        http://shadowthein.net/details.php?id=*
 // @match        https://shadowthein.net/details.php?id=*
 // @match        https://baconbits.org/torrents.php?id=*
+// @match        https://broadcity.in/details.php?id=*
 // @match        https://www.morethantv.me/torrents.php?id=*
 // @match        https://www.morethantv.me/show/*
 // @grant        GM_addStyle
@@ -222,7 +223,7 @@
       imdb: '.metalinks a[href*="imdb.com/title"]',
       insertDomSelector: "#content>.thin>div:first",
       poster: ".sidebar img:first",
-      titleDom: ".details h2",
+      titleDom: ".details h2:first",
       doubanContainerDom: '<div class="douban-dom mtv"></div>'
     },
     "www.rarbgmirror.com": {
@@ -362,7 +363,7 @@
       var _a4, _b3;
       const {season = "", title} = data;
       if (season) {
-        const seasonNumber = (_b3 = (_a4 = torrentTitle.match(/S(?!eason)?0?(\d+)\.?(EP?\d+)?/i)) == null ? void 0 : _a4[1]) != null ? _b3 : 1;
+        const seasonNumber = (_b3 = (_a4 = torrentTitle.match(/S(?!eason)\s*?0?(\d+)\.?(EP?\d+)?/i)) == null ? void 0 : _a4[1]) != null ? _b3 : 1;
         if (parseInt(seasonNumber) === 1) {
           resolve(data);
         } else {

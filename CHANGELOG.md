@@ -1,3 +1,12 @@
+## [1.6.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.1...1.6.2) (2022-05-01)
+
+
+### Bug Fixes
+
+* **mtv:** title selector ([5da51a7](https://github.com/techmovie/DouBan-Info-for-PT/commit/5da51a70aed2aae3536af645f5a71aa16b3f221e))
+
+
+
 ## [1.6.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.0...1.6.1) (2022-04-25)
 
 
