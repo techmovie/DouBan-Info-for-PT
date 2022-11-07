@@ -117,6 +117,7 @@ const getDoubanInfo = async (doubanId, imdbId) => {
       const savedIds = GM_getValue('ids') || {};
       savedIds[imdbId] = {
         doubanId,
+        updateTime: Date.now(),
         ...doubanInfo,
       };
       GM_setValue('ids', savedIds);
@@ -142,7 +143,7 @@ const formatDoubanInfo = async (domString) => {
     .replace(/s(_ratio_poster|pic)/g, 'l$1')
     .replace(/img\d/, 'img9');
   const link = `https://movie.douban.com${jsonData.url}`;
-  const introductionDom = $('#link-report > span.all.hidden, #link-report > [property="v:summary"]', dom);
+  const introductionDom = $('#link-report > span.all.hidden,#link-report-intra > [property="v:summary"], #link-report > [property="v:summary"]', dom);
   const summary = (
     introductionDom.length > 0 ? introductionDom.text() : '暂无相关剧情介绍'
   ).split('\n').map(a => a.trim()).filter(a => a.length > 0).join('\n'); // 处理简介缩进

@@ -14,7 +14,8 @@ import './style.js';
     }
     try {
       const savedIds = GM_getValue('ids') || {};
-      if (!savedIds[imdbId]) {
+      if (!savedIds[imdbId] ||
+        (savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1000)) {
         let doubanId = '';
         const movieData = await getDoubanId(imdbId);
         if (!movieData) {
