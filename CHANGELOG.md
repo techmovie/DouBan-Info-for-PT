@@ -1,3 +1,12 @@
+## [1.6.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.2...1.6.3) (2022-11-07)
+
+
+### Bug Fixes
+
+* 豆瓣简介增加dom选择器 ([69ddb87](https://github.com/techmovie/DouBan-Info-for-PT/commit/69ddb87fcabf6598a47b4ce08ca7aba7960cac96))
+
+
+
 ## [1.6.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.1...1.6.2) (2022-05-01)
 
 

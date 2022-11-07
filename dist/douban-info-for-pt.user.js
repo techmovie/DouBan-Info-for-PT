@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.6.2
+// @version      1.6.3
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -385,7 +385,8 @@
         const doubanInfo = await formatDoubanInfo(data);
         const savedIds = GM_getValue("ids") || {};
         savedIds[imdbId] = __assign({
-          doubanId
+          doubanId,
+          updateTime: Date.now()
         }, doubanInfo);
         GM_setValue("ids", savedIds);
         return doubanInfo;
@@ -410,7 +411,7 @@
     const director = jsonData.director ? jsonData.director : [];
     const poster = jsonData.image.replace(/s(_ratio_poster|pic)/g, "l$1").replace(/img\d/, "img9");
     const link = `https://movie.douban.com${jsonData.url}`;
-    const introductionDom = $('#link-report > span.all.hidden, #link-report > [property="v:summary"]', dom);
+    const introductionDom = $('#link-report > span.all.hidden,#link-report-intra > [property="v:summary"], #link-report > [property="v:summary"]', dom);
     const summary = (introductionDom.length > 0 ? introductionDom.text() : "\u6682\u65E0\u76F8\u5173\u5267\u60C5\u4ECB\u7ECD").split("\n").map((a) => a.trim()).filter((a) => a.length > 0).join("\n");
     const genre = $('#info span[property="v:genre"]', dom).map(function() {
       return $(this).text().trim();
@@ -738,7 +739,7 @@
       }
       try {
         const savedIds = GM_getValue("ids") || {};
-        if (!savedIds[imdbId]) {
+        if (!savedIds[imdbId] || savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1e3) {
           let doubanId = "";
           const movieData = await getDoubanId(imdbId);
           if (!movieData) {
