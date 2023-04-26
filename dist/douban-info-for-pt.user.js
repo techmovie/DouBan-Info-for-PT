@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.6.3
+// @version      1.6.4
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -265,6 +265,7 @@
   var CURRENT_SITE_NAME = (_a3 = CURRENT_SITE_INFO == null ? void 0 : CURRENT_SITE_INFO.siteName) != null ? _a3 : "";
   var DOUBAN_API_URL = "https://movie.douban.com/subject/{doubanId}";
   var DOUBAN_SEARCH_API = "https://movie.douban.com/j/subject_suggest?q={query}";
+  var DOUBAN_SUGGEST_API = "https://www.douban.com/search?cat=1002&q={query}";
   var PIC_URLS = {
     border: "https://ptpimg.me/zz4632.png",
     icon2x: "https://ptpimg.me/n74cjc.png",
@@ -355,6 +356,34 @@
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+  var getDoubanIdByIMDB = async (imdbId) => {
+    var _a4, _b3, _c, _d;
+    try {
+      const url = DOUBAN_SUGGEST_API.replace("{query}", imdbId);
+      const options = {
+        cookie: "",
+        anonymous: false,
+        responseType: void 0
+      };
+      const data = await fetch(url, options);
+      const doc = new DOMParser().parseFromString(data, "text/html");
+      const linkDom = doc.querySelector(".result-list .result h3 a");
+      if (!linkDom) {
+        throw new Error("\u8C46\u74E3ID\u83B7\u53D6\u5931\u8D25");
+      } else {
+        const {href, textContent} = linkDom;
+        const season = (_b3 = (_a4 = textContent == null ? void 0 : textContent.match(/第(.+?)季/)) == null ? void 0 : _a4[1]) != null ? _b3 : "";
+        const doubanId = (_d = (_c = decodeURIComponent(href).match(/subject\/(\d+)/)) == null ? void 0 : _c[1]) != null ? _d : "";
+        return {
+          id: doubanId,
+          season,
+          title: textContent || ""
+        };
+      }
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
   var getTvSeasonData = (data) => {
@@ -741,7 +770,7 @@
         const savedIds = GM_getValue("ids") || {};
         if (!savedIds[imdbId] || savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1e3) {
           let doubanId = "";
-          const movieData = await getDoubanId(imdbId);
+          const movieData = await getDoubanIdByIMDB(imdbId);
           if (!movieData) {
             throw new Error("\u6CA1\u6709\u627E\u5230\u8C46\u74E3\u6761\u76EE");
           }
