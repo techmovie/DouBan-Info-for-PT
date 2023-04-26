@@ -2,8 +2,8 @@ import {
   CURRENT_SITE_INFO, CURRENT_SITE_NAME,
 } from './const';
 import {
-  getImdbId, getDoubanId, getTvSeasonData, createDoubanDom,
-  getDoubanInfo, addToPtpPage,
+  getImdbId, getTvSeasonData, createDoubanDom,
+  getDoubanInfo, addToPtpPage, getDoubanIdByIMDB,
 } from './common';
 import './style.js';
 (async () => {
@@ -17,7 +17,7 @@ import './style.js';
       if (!savedIds[imdbId] ||
         (savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1000)) {
         let doubanId = '';
-        const movieData = await getDoubanId(imdbId);
+        const movieData = await getDoubanIdByIMDB(imdbId);
         if (!movieData) {
           throw new Error('没有找到豆瓣条目');
         }

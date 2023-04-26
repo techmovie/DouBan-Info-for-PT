@@ -1,6 +1,6 @@
 import {
   CURRENT_SITE_INFO, PIC_URLS,
-  DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME,
+  DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME, DOUBAN_SUGGEST_API,
 } from './const';
 const isChinese = (title) => {
   return /[\u4e00-\u9fa5]+/.test(title);
@@ -87,6 +87,33 @@ const getDoubanId = async (imdbId) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+const getDoubanIdByIMDB = async (imdbId) => {
+  try {
+    const url = DOUBAN_SUGGEST_API.replace('{query}', imdbId);
+    const options = {
+      cookie: '',
+      anonymous: false,
+      responseType: undefined,
+    };
+    const data = await fetch(url, options);
+    const doc = new DOMParser().parseFromString(data, 'text/html');
+    const linkDom = doc.querySelector('.result-list .result h3 a');
+    if (!linkDom) {
+      throw new Error('豆瓣ID获取失败');
+    } else {
+      const { href, textContent } = linkDom;
+      const season = textContent?.match(/第(.+?)季/)?.[1] ?? '';
+      const doubanId = decodeURIComponent(href).match(/subject\/(\d+)/)?.[1] ?? '';
+      return ({
+        id: doubanId,
+        season,
+        title: textContent || '',
+      });
+    }
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
 const getTvSeasonData = (data) => {
@@ -300,4 +327,5 @@ export {
   getDoubanId,
   createDoubanDom,
   getTvSeasonData,
+  getDoubanIdByIMDB,
 };
