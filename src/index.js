@@ -3,7 +3,7 @@ import {
 } from './const';
 import {
   getImdbId, getTvSeasonData, createDoubanDom,
-  getDoubanInfo, addToPtpPage, getDoubanIdByIMDB,
+  addToPtpPage, getDoubanInfoByIMDB,
 } from './common';
 import './style.js';
 (async () => {
@@ -17,20 +17,18 @@ import './style.js';
       if (!savedIds[imdbId] ||
         (savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1000)) {
         let doubanId = '';
-        const movieData = await getDoubanIdByIMDB(imdbId);
+        const movieData = await getDoubanInfoByIMDB(imdbId);
         if (!movieData) {
           throw new Error('没有找到豆瓣条目');
         }
-        const { id = '', season = '' } = movieData;
+        const { id = '', episodes = '' } = movieData;
         doubanId = id;
-        if (season) {
+        if (episodes) {
           const tvData = await getTvSeasonData(movieData);
           doubanId = tvData.id;
         }
         if (CURRENT_SITE_NAME === 'PTP') {
-          getDoubanInfo(doubanId, imdbId).then(doubanData => {
-            addToPtpPage(doubanData);
-          });
+          addToPtpPage(movieData);
         } else {
           createDoubanDom(doubanId, imdbId);
         }

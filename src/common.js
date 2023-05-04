@@ -1,6 +1,7 @@
 import {
   CURRENT_SITE_INFO, PIC_URLS,
   DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME, DOUBAN_SUGGEST_API,
+  DOUBAN_SUBJECT_URL,
 } from './const';
 const isChinese = (title) => {
   return /[\u4e00-\u9fa5]+/.test(title);
@@ -116,26 +117,49 @@ const getDoubanIdByIMDB = async (imdbId) => {
     throw new Error(error.message);
   }
 };
-const getTvSeasonData = (data) => {
+// const getTvSeasonData = (data) => {
+//   const torrentTitle = getTorrentTitle();
+//   return new Promise((resolve, reject) => {
+//     const { season = '', title } = data;
+//     if (season) {
+//       const seasonNumber = torrentTitle.match(/S(?!eason)\s*?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
+//       if (parseInt(seasonNumber) === 1) {
+//         resolve(data);
+//       } else {
+//         const query = title.replace(/第.+?季/, `第${seasonNumber}季`);
+//         getDoubanId(query).then(data => {
+//           resolve(data);
+//         });
+//       }
+//     }
+//   });
+// };
+const getTvSeasonData = async (data) => {
   const torrentTitle = getTorrentTitle();
-  return new Promise((resolve, reject) => {
-    const { season = '', title } = data;
-    if (season) {
-      const seasonNumber = torrentTitle.match(/S(?!eason)\s*?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
-      if (parseInt(seasonNumber) === 1) {
-        resolve(data);
-      } else {
-        const query = title.replace(/第.+?季/, `第${seasonNumber}季`);
-        getDoubanId(query).then(data => {
-          resolve(data);
-        });
+  const { episodes = '', chineseTitle } = data;
+  if (episodes) {
+    const seasonNumber = torrentTitle.match(/S(?!eason)\s*?0?(\d+)\.?(EP?\d+)?/i)?.[1] ?? 1;
+    if (parseInt(seasonNumber) === 1) {
+      return data;
+    } else {
+      const query = `${chineseTitle} 第${seasonNumber}季`;
+      const params = encodeURI('apikey=0ab215a8b1977939201640fa14c66bab');
+      const searchData = await fetch(`${DOUBAN_API_URL}/search?q=${query}`, {
+        data: params,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      if (searchData.count > 0) {
+        return { id: searchData.subjects[0].id };
       }
     }
-  });
+  }
 };
 const getDoubanInfo = async (doubanId, imdbId) => {
   try {
-    const url = DOUBAN_API_URL.replace('{doubanId}', doubanId);
+    const url = DOUBAN_SUBJECT_URL.replace('{doubanId}', doubanId);
     const data = await fetch(url, {
       responseType: 'text',
     });
@@ -155,6 +179,68 @@ const getDoubanInfo = async (doubanId, imdbId) => {
   } catch (error) {
     console.log(error);
   }
+};
+const getDoubanInfoByIMDB = async (imdbId) => {
+  try {
+    const params = encodeURI('apikey=0ab215a8b1977939201640fa14c66bab');
+    const doubanData = await fetch(`${DOUBAN_API_URL}/imdb/${imdbId}`, {
+      data: params,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    const { attrs = {}, image, summary, rating, alt_title: altTitle, mobile_link: mobileLink } = doubanData;
+    const subjectLink = mobileLink.replace('m.douban.com/movie', 'movie.douban.com').replace(/\/$/, '');
+    const doubanId = subjectLink.match(/subject\/(\d+)/)?.[1] ?? '';
+    const awards = await getAwardInfo(subjectLink);
+    const doubanInfo = {
+      director: attrs.director?.join(' / '),
+      runtime: attrs.movie_duration?.join(' / '),
+      language: attrs.language?.join(' / '),
+      genre: attrs.movie_type?.join(' / ') ?? '',
+      aka: altTitle || '',
+      region: attrs.country?.join(' / '),
+      link: subjectLink,
+      poster: image,
+      summary,
+      chineseTitle: altTitle.split('/')[0].trim(),
+      votes: rating.numRaters,
+      average: rating.average,
+      awards: awards,
+      id: subjectLink.match(/subject\/(\d+)/)?.[1] ?? '',
+      episodes: attrs.episodes?.join(' / ') ?? '',
+    };
+    // no need to save series info
+    if (!attrs.episodes) {
+      const savedIds = GM_getValue('ids') || {};
+      savedIds[imdbId] = {
+        doubanId,
+        updateTime: Date.now(),
+        ...doubanInfo,
+      };
+      GM_setValue('ids', savedIds);
+    }
+    return doubanInfo;
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getAwardInfo = async (doubanLink) => {
+  const awardsPage = await fetch(`${doubanLink}/awards/`, {
+    responseType: 'text',
+  });
+  const awardsDoc = new DOMParser().parseFromString(awardsPage, 'text/html');
+  const awards = $('#content > div > div.article', awardsDoc).html()
+    .replace(/[ \n]/g, '')
+    .replace(/<\/li><li>/g, '</li> <li>')
+    .replace(/<\/a><span/g, '</a> <span')
+    .replace(/<(div|ul)[^>]*>/g, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/ +\n/g, '\n')
+    .trim();
+  return awards?.replace(/\n/g, '<br>') ?? '';
 };
 const formatDoubanInfo = async (domString) => {
   const dom = new DOMParser().parseFromString(domString, 'text/html');
@@ -189,19 +275,7 @@ const formatDoubanInfo = async (domString) => {
     }).join('/');
     aka = aka.split('/');
   }
-  const awardsPage = await fetch(`${link}/awards`, {
-    responseType: 'text',
-  });
-  const awardsDoc = new DOMParser().parseFromString(awardsPage, 'text/html');
-  const awards = $('#content > div > div.article', awardsDoc).html()
-    .replace(/[ \n]/g, '')
-    .replace(/<\/li><li>/g, '</li> <li>')
-    .replace(/<\/a><span/g, '</a> <span')
-    .replace(/<(div|ul)[^>]*>/g, '\n')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/ +\n/g, '\n')
-    .trim();
+  const awards = await getAwardInfo(link);
   return {
     director: director.map(item => item.name),
     runtime,
@@ -215,7 +289,7 @@ const formatDoubanInfo = async (domString) => {
     chineseTitle,
     votes,
     average: rating,
-    awards: awards?.replace(/\n/g, '<br>') ?? '',
+    awards,
   };
 };
 const getTorrentTitle = () => {
@@ -328,4 +402,5 @@ export {
   createDoubanDom,
   getTvSeasonData,
   getDoubanIdByIMDB,
+  getDoubanInfoByIMDB,
 };

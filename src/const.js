@@ -11,9 +11,10 @@ if (host && host.match(/rarbg/i)) {
 }
 const CURRENT_SITE_INFO = siteInfo;
 const CURRENT_SITE_NAME = CURRENT_SITE_INFO?.siteName ?? '';
-const DOUBAN_API_URL = 'https://movie.douban.com/subject/{doubanId}';
+const DOUBAN_SUBJECT_URL = 'https://movie.douban.com/subject/{doubanId}';
 const DOUBAN_SEARCH_API = 'https://movie.douban.com/j/subject_suggest?q={query}';
 const DOUBAN_SUGGEST_API = 'https://www.douban.com/search?cat=1002&q={query}';
+const DOUBAN_API_URL = 'https://api.douban.com/v2/movie';
 const PIC_URLS = {
   border: 'https://ptpimg.me/zz4632.png',
   icon2x: 'https://ptpimg.me/n74cjc.png',
@@ -27,4 +28,5 @@ export {
   DOUBAN_SEARCH_API,
   PIC_URLS,
   DOUBAN_SUGGEST_API,
+  DOUBAN_SUBJECT_URL,
 };
