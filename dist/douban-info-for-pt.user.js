@@ -1,41 +1,41 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.0
+// @version      1.7.1
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
-// @match        *://passthepopcorn.me/torrents.php?id=*
-// @match        *://passthepopcorn.me/requests.php?action=view&id=*
-// @match        *://beyond-hd.me/torrents/*
-// @match        *://beyond-hd.me/library/title/*
-// @match        *://blutopia.xyz/torrents/*
-// @match        *://asiancinema.me/torrents/*
-// @match        *://hdbits.org/details.php?id=*
-// @match        *://hdbits.org/requests/show_request?id=*
-// @match        *://uhdbits.org/torrents.php?id=*
-// @match        *://filelist.io/details.php?id=*
-// @match        *://hd-torrents.org/details.php?id=*
-// @match        *://karagarga.in/details.php?id=*
-// @match        *://privatehd.to/torrent/*
-// @match        *://www.rarbgmirror.com/torrent/*
-// @match        *://rarbggo.org/torrent/*
-// @match        *://rarbggo.to/torrent/*
-// @match        *://rarbgprx.org/torrent/*
-// @match        *://proxyrarbg.org/torrent/*
-// @match        *://broadcasthe.net/series.php?id=*
-// @match        *://iptorrents.com/torrent.php?id=*
-// @match        *://www.iptorrents.com/torrent.php?id=*
-// @match        *://www.torrentleech.org/torrent/*
-// @match        *://avistaz.to/torrent/*
-// @match        *://secret-cinema.pw/torrents.php?id=*
-// @match        *://aither.cc/torrents/*
-// @match        *://shadowthein.net/details.php?id=*
-// @match        *://shadowthein.net/details.php?id=*
-// @match        *://baconbits.org/torrents.php?id=*
-// @match        *://broadcity.in/details.php?id=*
-// @match        *://www.morethantv.me/torrents.php?id=*
-// @match        *://www.morethantv.me/show/*
+// @match        https://passthepopcorn.me/torrents.php?id=*
+// @match        https://passthepopcorn.me/requests.php?action=view&id=*
+// @match        https://beyond-hd.me/torrents/*
+// @match        https://beyond-hd.me/library/title/*
+// @match        https://blutopia.xyz/torrents/*
+// @match        https://asiancinema.me/torrents/*
+// @match        https://hdbits.org/details.php?id=*
+// @match        https://hdbits.org/requests/show_request?id=*
+// @match        https://uhdbits.org/torrents.php?id=*
+// @match        https://filelist.io/details.php?id=*
+// @match        https://hd-torrents.org/details.php?id=*
+// @match        https://karagarga.in/details.php?id=*
+// @match        https://privatehd.to/torrent/*
+// @match        https://www.rarbgmirror.com/torrent/*
+// @match        http://rarbggo.org/torrent/*
+// @match        http://rarbggo.to/torrent/*
+// @match        https://rarbgprx.org/torrent/*
+// @match        https://proxyrarbg.org/torrent/*
+// @match        https://broadcasthe.net/series.php?id=*
+// @match        https://iptorrents.com/torrent.php?id=*
+// @match        https://www.iptorrents.com/torrent.php?id=*
+// @match        https://www.torrentleech.org/torrent/*
+// @match        https://avistaz.to/torrent/*
+// @match        https://secret-cinema.pw/torrents.php?id=*
+// @match        https://aither.cc/torrents/*
+// @match        http://shadowthein.net/details.php?id=*
+// @match        https://shadowthein.net/details.php?id=*
+// @match        https://baconbits.org/torrents.php?id=*
+// @match        https://broadcity.in/details.php?id=*
+// @match        https://www.morethantv.me/torrents.php?id=*
+// @match        https://www.morethantv.me/show/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab
@@ -396,7 +396,12 @@
           "Content-Type": "application/x-www-form-urlencoded"
         }
       });
-      const {attrs = {}, image, summary, rating, alt_title: altTitle, mobile_link: mobileLink} = doubanData;
+      const {title, attrs = {}, image, summary, rating, alt_title: altTitle, mobile_link: mobileLink} = doubanData;
+      let chineseTitle = title;
+      const isChineseReg = /[\u4e00-\u9fa5]+/;
+      if (!isChineseReg.test(title) && !title.match(/^\d+$/)) {
+        chineseTitle = altTitle.split("/")[0].trim();
+      }
       const subjectLink = mobileLink.replace("m.douban.com/movie", "movie.douban.com").replace(/\/$/, "");
       const doubanId = (_b3 = (_a4 = subjectLink.match(/subject\/(\d+)/)) == null ? void 0 : _a4[1]) != null ? _b3 : "";
       const awards = await getAwardInfo(subjectLink);
@@ -410,7 +415,7 @@
         link: subjectLink,
         poster: image,
         summary,
-        chineseTitle: altTitle.split("/")[0].trim(),
+        chineseTitle,
         votes: rating.numRaters,
         average: rating.average,
         awards,

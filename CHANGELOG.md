@@ -1,3 +1,12 @@
+## [1.7.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.0...1.7.1) (2023-05-06)
+
+
+### Bug Fixes
+
+* 修改中文名获取逻辑 ([1aab56c](https://github.com/techmovie/DouBan-Info-for-PT/commit/1aab56c50f221757658a1fdefc7f009453c152eb))
+
+
+
 # [1.7.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.6.4...1.7.0) (2023-05-04)
 
 
