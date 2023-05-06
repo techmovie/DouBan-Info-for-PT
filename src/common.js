@@ -190,7 +190,12 @@ const getDoubanInfoByIMDB = async (imdbId) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-    const { attrs = {}, image, summary, rating, alt_title: altTitle, mobile_link: mobileLink } = doubanData;
+    const { title, attrs = {}, image, summary, rating, alt_title: altTitle, mobile_link: mobileLink } = doubanData;
+    let chineseTitle = title;
+    const isChineseReg = /[\u4e00-\u9fa5]+/;
+    if (!isChineseReg.test(title) && !title.match(/^\d+$/)) {
+      chineseTitle = altTitle.split('/')[0].trim();
+    }
     const subjectLink = mobileLink.replace('m.douban.com/movie', 'movie.douban.com').replace(/\/$/, '');
     const doubanId = subjectLink.match(/subject\/(\d+)/)?.[1] ?? '';
     const awards = await getAwardInfo(subjectLink);
@@ -204,7 +209,7 @@ const getDoubanInfoByIMDB = async (imdbId) => {
       link: subjectLink,
       poster: image,
       summary,
-      chineseTitle: altTitle.split('/')[0].trim(),
+      chineseTitle,
       votes: rating.numRaters,
       average: rating.average,
       awards: awards,
