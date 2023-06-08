@@ -1,0 +1,8 @@
+url: https://tgx.rs
+host: tgx.rs
+siteName: TorrentGalaxy
+poster: '#covercell img'
+imdb: '#imdbpage[href*="imdb.com/title"]'
+titleDom: '.torrentpagetable.limitwidth:first a.textshadow'
+insertDomSelector: '.buttonbox'
+doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
