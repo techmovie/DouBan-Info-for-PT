@@ -75,6 +75,7 @@ exports.userScriptComment = `// ==UserScript==
 // @match        *://broadcity.in/details.php?id=*
 // @match        *://www.morethantv.me/torrents.php?id=*
 // @match        *://www.morethantv.me/show/*
+// @match        *://tgx.rs/torrent/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_openInTab

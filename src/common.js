@@ -194,7 +194,11 @@ const getDoubanInfoByIMDB = async (imdbId) => {
     let chineseTitle = title;
     const isChineseReg = /[\u4e00-\u9fa5]+/;
     if (!isChineseReg.test(title) && !title.match(/^\d+$/)) {
-      chineseTitle = altTitle.split('/')[0].trim();
+      if (altTitle) {
+        chineseTitle = altTitle.split('/')[0].trim();
+      } else {
+        chineseTitle = title;
+      }
     }
     const subjectLink = mobileLink.replace('m.douban.com/movie', 'movie.douban.com').replace(/\/$/, '');
     const doubanId = subjectLink.match(/subject\/(\d+)/)?.[1] ?? '';
