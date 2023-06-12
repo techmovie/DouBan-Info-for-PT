@@ -1,3 +1,17 @@
+## [1.7.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.1...1.7.2) (2023-06-12)
+
+
+### Bug Fixes
+
+* 修复部分条目中文名不显示的问题 ([1df7fee](https://github.com/techmovie/DouBan-Info-for-PT/commit/1df7fee6d80ee779bde61e9dadfc0a41d3a666a5))
+
+
+### Features
+
+* **new site:** add TorrentGalaxy ([f1d6e24](https://github.com/techmovie/DouBan-Info-for-PT/commit/f1d6e241fe26e01d6dd36ea068faedd8128003e0)), closes [#12](https://github.com/techmovie/DouBan-Info-for-PT/issues/12)
+
+
+
 ## [1.7.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.0...1.7.1) (2023-05-06)
 
 
