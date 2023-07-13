@@ -353,8 +353,6 @@ const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   htmlData = htmlData.replace(/(html,)body,/, '$1');// HDB body样式覆盖
   htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
   htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
-  htmlData = htmlData.replace(/url\(.+?output_card\/ic_rating_m\.png\)/g, `url(${PIC_URLS.icon})`);
-  htmlData = htmlData.replace(/(1x,\s+)url\(.+?output_card\/ic_rating_m@2x\.png\)/g, `$1url(${PIC_URLS.icon2x})`);
   let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
   headDom = headDom.replace(/<link.+?>/g, '');
   const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
