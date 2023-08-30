@@ -741,6 +741,9 @@ body #douban-wrapper {
     height: 24px;
     line-height: 24px;
 }
+.ant .icon-pt1{
+    border-radius: 4px;
+}
 
 .icon-pt2{
     display: inline-block;

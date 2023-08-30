@@ -50,6 +50,50 @@ const addToPtpPage = (data) => {
     <br>(${data.votes} votes)</td>`);
   }
 };
+const addToANTPage = (data) => {
+  console.log(data);
+  $('.header h2').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
+  if (data.summary) {
+    const synopsisDom = `
+    <div class="box torrent_description">
+      <div class="head"><a href="#">↑</a>&nbsp;<strong>中文简介</strong></div>
+      <div class="body" style="text-align:justify">${data.summary}</div>
+    </div>`;
+    $('.torrent_description,.box_request_desc').after(synopsisDom);
+  }
+  $('.box_details:first').before(`
+    <div class="box box_details">
+      <div class="head"><strong></strong>电影信息</div>
+      <div class="pad">
+        <ul class="stats nobullet">
+          <li><strong>导演:</strong> ${data.director}</li>
+          <li><strong>类型:</strong> ${data.genre}</li>
+          <li><strong>制片国家/地区:</strong> ${data.region}</li>
+          <li><strong>语言:</strong> ${data.language}</li>
+          <li><strong>时长:</strong> ${data.runtime}</li>
+          <li><strong>又名:</strong>  ${data.aka}</li
+          <li><strong>获奖情况:</strong> <br> ${data.awards}</li
+      </ul>
+      </div>    
+    </div>`);
+  if (data.average) {
+    $('.box.torrent_ratings .body tr').prepend(
+    `<td colspan="1">
+      <center>
+        <a target="_blank" class="rating ant" href="${data.link}" rel="noreferrer">
+          <div style="font-size: 0;">
+            <span class="icon-pt1">豆</span>
+          </div>
+        </a>
+      </center>
+    </td>
+    <td>
+      <span class="rating">${data.average}</span>
+      <span class="mid">/</span>
+      <span class="outof"> 10</span>
+      <br>(${data.votes} votes)</td>`);
+  }
+};
 const getImdbId = () => {
   let imdbLink = '';
   const imdbConfig = CURRENT_SITE_INFO.imdb;
@@ -340,7 +384,7 @@ const getUrlParam = (key) => {
 const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   const div = document.createElement('div');
   let { doubanContainerDom, insertDomSelector, siteName, poster } = CURRENT_SITE_INFO;
-  if (siteName.match(/(HDT|RARBG)$/)) {
+  if (siteName.match(/(HDT)$/)) {
     insertDomSelector = $(insertDomSelector).parent();
   }
   $(insertDomSelector).before(doubanContainerDom);
@@ -405,6 +449,7 @@ export {
   getImdbId,
   getDoubanInfo,
   addToPtpPage,
+  addToANTPage,
   getDoubanId,
   createDoubanDom,
   getTvSeasonData,

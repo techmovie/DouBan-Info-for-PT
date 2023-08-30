@@ -1,8 +1,0 @@
-url: 'https://www.rarbgmirror.com'
-host: www.rarbgmirror.com
-siteName: RARBG
-poster: 'td.header2:contains(Poster) ~ td img'
-imdb: '.lista a[href*="imdb.com/title"]:first'
-titleDom: 'h1.black'
-insertDomSelector: 'td.header2:contains(Poster)'
-doubanContainerDom: '<tr><td align="right" class="header2" valign="top">豆瓣</td><td class="lisaa douban-dom"></td></tr>'

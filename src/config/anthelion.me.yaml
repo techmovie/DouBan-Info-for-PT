@@ -1,0 +1,7 @@
+url: https://anthelion.me
+host: anthelion.me
+siteName: ANT
+siteType: gazelle
+imdb: 
+  request: '.layout a[href*="imdb.com/title"]:first'
+  torrent: '.torrent_ratings a[href*="imdb.com/title"]:first'

@@ -46,6 +46,8 @@ exports.userScriptComment = `// ==UserScript==
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        *://passthepopcorn.me/torrents.php?id=*
 // @match        *://passthepopcorn.me/requests.php?action=view&id=*
+// @match        *://anthelion.me/torrents.php?id=*
+// @match        *://anthelion.me/requests.php?action=view&id=*
 // @match        *://beyond-hd.me/torrents/*
 // @match        *://beyond-hd.me/library/title/*
 // @match        *://blutopia.xyz/torrents/*
@@ -57,11 +59,6 @@ exports.userScriptComment = `// ==UserScript==
 // @match        *://hd-torrents.org/details.php?id=*
 // @match        *://karagarga.in/details.php?id=*
 // @match        *://privatehd.to/torrent/*
-// @match        *://www.rarbgmirror.com/torrent/*
-// @match        *://rarbggo.org/torrent/*
-// @match        *://rarbggo.to/torrent/*
-// @match        *://rarbgprx.org/torrent/*
-// @match        *://proxyrarbg.org/torrent/*
 // @match        *://broadcasthe.net/series.php?id=*
 // @match        *://iptorrents.com/torrent.php?id=*
 // @match        *://www.iptorrents.com/torrent.php?id=*

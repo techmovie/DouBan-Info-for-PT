@@ -3,7 +3,7 @@ import {
 } from './const';
 import {
   getImdbId, getTvSeasonData, createDoubanDom,
-  addToPtpPage, getDoubanInfoByIMDB,
+  addToPtpPage, getDoubanInfoByIMDB, addToANTPage,
 } from './common';
 import './style.js';
 (async () => {
@@ -27,15 +27,19 @@ import './style.js';
           const tvData = await getTvSeasonData(movieData);
           doubanId = tvData.id;
         }
-        if (CURRENT_SITE_NAME === 'PTP') {
+        if (CURRENT_SITE_NAME.match(/PTP/)) {
           addToPtpPage(movieData);
+        } else if (CURRENT_SITE_NAME.match(/ANT/)) {
+          addToANTPage(movieData);
         } else {
           createDoubanDom(doubanId, imdbId);
         }
       } else {
         const savedData = savedIds[imdbId];
-        if (CURRENT_SITE_NAME === 'PTP') {
+        if (CURRENT_SITE_NAME.match(/PTP/)) {
           addToPtpPage(savedData);
+        } else if (CURRENT_SITE_NAME.match(/ANT/)) {
+          addToANTPage(savedData);
         } else {
           createDoubanDom(savedData.doubanId, imdbId, savedData);
         }
