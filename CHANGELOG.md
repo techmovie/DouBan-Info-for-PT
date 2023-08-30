@@ -1,3 +1,12 @@
+## [1.7.4](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.3...1.7.4) (2023-08-30)
+
+
+### Features
+
+* add ant remove rargb ([5c6158f](https://github.com/techmovie/DouBan-Info-for-PT/commit/5c6158f52f10a7f00a58c59761b9789e5c12a3ec))
+
+
+
 ## [1.7.3](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.2...1.7.3) (2023-07-13)
 
 

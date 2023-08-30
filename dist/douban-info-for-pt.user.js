@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.3
+// @version      1.7.4
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
 // @match        *://passthepopcorn.me/torrents.php?id=*
 // @match        *://passthepopcorn.me/requests.php?action=view&id=*
+// @match        *://anthelion.me/torrents.php?id=*
+// @match        *://anthelion.me/requests.php?action=view&id=*
 // @match        *://beyond-hd.me/torrents/*
 // @match        *://beyond-hd.me/library/title/*
 // @match        *://blutopia.xyz/torrents/*
@@ -18,11 +20,6 @@
 // @match        *://hd-torrents.org/details.php?id=*
 // @match        *://karagarga.in/details.php?id=*
 // @match        *://privatehd.to/torrent/*
-// @match        *://www.rarbgmirror.com/torrent/*
-// @match        *://rarbggo.org/torrent/*
-// @match        *://rarbggo.to/torrent/*
-// @match        *://rarbgprx.org/torrent/*
-// @match        *://proxyrarbg.org/torrent/*
 // @match        *://broadcasthe.net/series.php?id=*
 // @match        *://iptorrents.com/torrent.php?id=*
 // @match        *://www.iptorrents.com/torrent.php?id=*
@@ -57,6 +54,16 @@
       imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',
       insertDomSelector: ".torrent-buttons",
       doubanContainerDom: '<div class="movie-wrapper"><div class="movie-overlay" style="background-color: rgba(81, 51, 40, 0.75);"></div><div class="douban-dom" style="position: relative;z-index: 2;"></div></div>'
+    },
+    "anthelion.me": {
+      url: "https://anthelion.me",
+      host: "anthelion.me",
+      siteName: "ANT",
+      siteType: "gazelle",
+      imdb: {
+        request: '.layout a[href*="imdb.com/title"]:first',
+        torrent: '.torrent_ratings a[href*="imdb.com/title"]:first'
+      }
     },
     "asiancinema.me": {
       url: "https://asiancinema.me",
@@ -237,16 +244,6 @@
       titleDom: ".details h2:first",
       doubanContainerDom: '<div class="douban-dom mtv"></div>'
     },
-    "www.rarbgmirror.com": {
-      url: "https://www.rarbgmirror.com",
-      host: "www.rarbgmirror.com",
-      siteName: "RARBG",
-      poster: "td.header2:contains(Poster) ~ td img",
-      imdb: '.lista a[href*="imdb.com/title"]:first',
-      titleDom: "h1.black",
-      insertDomSelector: "td.header2:contains(Poster)",
-      doubanContainerDom: '<tr><td align="right" class="header2" valign="top">\u8C46\u74E3</td><td class="lisaa douban-dom"></td></tr>'
-    },
     "www.torrentleech.org": {
       url: "https://www.torrentleech.org",
       host: "torrentleech.org",
@@ -264,9 +261,7 @@
   var _a, _b;
   var siteInfo = (_b = (_a = PT_SITE) == null ? void 0 : _a[host]) != null ? _b : "";
   var _a2, _b2;
-  if (host && host.match(/rarbg/i)) {
-    siteInfo = PT_SITE["www.rarbgmirror.com"];
-  } else if (host && host.match(/iptorrents/i)) {
+  if (host && host.match(/iptorrents/i)) {
     siteInfo = PT_SITE["iptorrents.com"];
   } else {
     siteInfo = (_b2 = (_a2 = PT_SITE) == null ? void 0 : _a2[host]) != null ? _b2 : "";
@@ -325,6 +320,49 @@
     <span class="mid">/</span>
     <span class="outof"> 10</span>
     <br>(${data.votes} votes)</td>`);
+    }
+  };
+  var addToANTPage = (data) => {
+    console.log(data);
+    $(".header h2").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
+    if (data.summary) {
+      const synopsisDom = `
+    <div class="box torrent_description">
+      <div class="head"><a href="#">\u2191</a>&nbsp;<strong>\u4E2D\u6587\u7B80\u4ECB</strong></div>
+      <div class="body" style="text-align:justify">${data.summary}</div>
+    </div>`;
+      $(".torrent_description,.box_request_desc").after(synopsisDom);
+    }
+    $(".box_details:first").before(`
+    <div class="box box_details">
+      <div class="head"><strong></strong>\u7535\u5F71\u4FE1\u606F</div>
+      <div class="pad">
+        <ul class="stats nobullet">
+          <li><strong>\u5BFC\u6F14:</strong> ${data.director}</li>
+          <li><strong>\u7C7B\u578B:</strong> ${data.genre}</li>
+          <li><strong>\u5236\u7247\u56FD\u5BB6/\u5730\u533A:</strong> ${data.region}</li>
+          <li><strong>\u8BED\u8A00:</strong> ${data.language}</li>
+          <li><strong>\u65F6\u957F:</strong> ${data.runtime}</li>
+          <li><strong>\u53C8\u540D:</strong>  ${data.aka}</li
+          <li><strong>\u83B7\u5956\u60C5\u51B5:</strong> <br> ${data.awards}</li
+      </ul>
+      </div>    
+    </div>`);
+    if (data.average) {
+      $(".box.torrent_ratings .body tr").prepend(`<td colspan="1">
+      <center>
+        <a target="_blank" class="rating ant" href="${data.link}" rel="noreferrer">
+          <div style="font-size: 0;">
+            <span class="icon-pt1">\u8C46</span>
+          </div>
+        </a>
+      </center>
+    </td>
+    <td>
+      <span class="rating">${data.average}</span>
+      <span class="mid">/</span>
+      <span class="outof"> 10</span>
+      <br>(${data.votes} votes)</td>`);
     }
   };
   var getImdbId = () => {
@@ -546,7 +584,7 @@
   var createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
     const div = document.createElement("div");
     let {doubanContainerDom, insertDomSelector, siteName, poster} = CURRENT_SITE_INFO;
-    if (siteName.match(/(HDT|RARBG)$/)) {
+    if (siteName.match(/(HDT)$/)) {
       insertDomSelector = $(insertDomSelector).parent();
     }
     $(insertDomSelector).before(doubanContainerDom);
@@ -1350,6 +1388,9 @@ body #douban-wrapper {
     height: 24px;
     line-height: 24px;
 }
+.ant .icon-pt1{
+    border-radius: 4px;
+}
 
 .icon-pt2{
     display: inline-block;
@@ -1510,15 +1551,19 @@ body #douban-wrapper {
             const tvData = await getTvSeasonData(movieData);
             doubanId = tvData.id;
           }
-          if (CURRENT_SITE_NAME === "PTP") {
+          if (CURRENT_SITE_NAME.match(/PTP/)) {
             addToPtpPage(movieData);
+          } else if (CURRENT_SITE_NAME.match(/ANT/)) {
+            addToANTPage(movieData);
           } else {
             createDoubanDom(doubanId, imdbId);
           }
         } else {
           const savedData = savedIds[imdbId];
-          if (CURRENT_SITE_NAME === "PTP") {
+          if (CURRENT_SITE_NAME.match(/PTP/)) {
             addToPtpPage(savedData);
+          } else if (CURRENT_SITE_NAME.match(/ANT/)) {
+            addToANTPage(savedData);
           } else {
             createDoubanDom(savedData.doubanId, imdbId, savedData);
           }
