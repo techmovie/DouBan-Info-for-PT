@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.4
+// @version      1.7.5
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
@@ -1102,34 +1102,18 @@ img.rating:nth-child(1) {
     background-size: contain
 }
 
-html,body,h1,h2 {
-    padding: 0;
-    margin: 0
-}
-
-body {
-    font: 12px Helvetica,Arial,sans-serif
-}
-
-body h1 {
-    line-height: normal
-}
-
-body h2 {
-    line-height: normal
-}
-
 body #douban-wrapper {
     width: 770px;
     height: 345px;
-    margin: 0
+    margin: 0;
+    font: 12px Helvetica,Arial,sans-serif
 }
 
-.ll {
+#douban-wrapper .ll {
     float: left
 }
 
-.col-container .fix-col {
+#douban-wrapper .col-container .fix-col {
     float: left
 }
 
@@ -1450,6 +1434,9 @@ body #douban-wrapper {
     background-image: none;
     background-color: transparent;
     text-shadow: none;
+    padding: 0;
+    margin: 0
+    line-height: normal;
 }
 #douban-wrapper .grid-col5 {
     font-size: 14px;
