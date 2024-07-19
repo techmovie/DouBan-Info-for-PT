@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.5
+// @version      1.7.6
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
-// @require      https://cdn.staticfile.org/jquery/1.7.1/jquery.min.js
+// @require      https://s4.zstatic.net/ajax/libs/jquery/1.7.1/jquery.min.js
 // @match        *://passthepopcorn.me/torrents.php?id=*
 // @match        *://passthepopcorn.me/requests.php?action=view&id=*
 // @match        *://anthelion.me/torrents.php?id=*

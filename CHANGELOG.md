@@ -1,3 +1,12 @@
+## [1.7.6](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.5...1.7.6) (2024-07-19)
+
+
+### Bug Fixes
+
+* replace jquery cdn ([7041441](https://github.com/techmovie/DouBan-Info-for-PT/commit/7041441515748266925d04ef120697fd8e6ce4fe))
+
+
+
 ## [1.7.5](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.4...1.7.5) (2023-09-23)
 
 
