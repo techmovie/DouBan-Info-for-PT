@@ -49,6 +49,7 @@ const addToPtpPage = (data) => {
     <span class="outof"> 10</span>
     <br>(${data.votes} votes)</td>`);
   }
+  $('.main-column').prepend($('#movie-ratings-table').parent());
 };
 const addToANTPage = (data) => {
   console.log(data);
