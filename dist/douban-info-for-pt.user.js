@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.7
+// @version      1.7.8
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://s4.zstatic.net/ajax/libs/jquery/1.7.1/jquery.min.js
@@ -66,8 +66,8 @@
       }
     },
     "asiancinema.me": {
-      url: "https://asiancinema.me",
-      host: "asiancinema.me",
+      url: "https://eiga.moi",
+      host: "eiga.moi",
       siteName: "ACM",
       poster: "img.movie-poster",
       imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)',

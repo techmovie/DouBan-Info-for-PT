@@ -1,3 +1,12 @@
+## [1.7.8](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.7...1.7.8) (2025-06-09)
+
+
+### Features
+
+* update acm ([8ce3d16](https://github.com/techmovie/DouBan-Info-for-PT/commit/8ce3d166e54e9d43d3dffcd393df56bb91ff43b2))
+
+
+
 ## [1.7.7](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.6...1.7.7) (2025-06-09)
 
 
