@@ -1,5 +1,5 @@
-url: 'https://asiancinema.me'
-host: asiancinema.me
+url: https://eiga.moi
+host: eiga.moi
 siteName: ACM
 poster: 'img.movie-poster'
 imdb: '.badge-user a[href*="imdb.com/title"]:nth-child(1)'
