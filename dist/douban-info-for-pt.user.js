@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         douban-info-for-pt
 // @namespace    https://github.com/techmovie/DouBan-Info-for-PT
-// @version      1.7.6
+// @version      1.7.7
 // @description  在PT站电影详情页展示部分中文信息
 // @author       birdplane
 // @require      https://s4.zstatic.net/ajax/libs/jquery/1.7.1/jquery.min.js
@@ -321,6 +321,7 @@
     <span class="outof"> 10</span>
     <br>(${data.votes} votes)</td>`);
     }
+    $(".main-column").prepend($("#movie-ratings-table").parent());
   };
   var addToANTPage = (data) => {
     console.log(data);
