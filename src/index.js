@@ -5,7 +5,7 @@ import {
   getImdbId, getTvSeasonData, createDoubanDom,
   addToPtpPage, getDoubanInfoByIMDB, addToANTPage,
 } from './common';
-import './style.js';
+import './style.css';
 (async () => {
   if (CURRENT_SITE_INFO) {
     const imdbId = getImdbId();

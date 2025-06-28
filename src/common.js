@@ -3,6 +3,8 @@ import {
   DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME, DOUBAN_SUGGEST_API,
   DOUBAN_SUBJECT_URL,
 } from './const';
+import $ from 'jquery';
+
 const isChinese = (title) => {
   return /[\u4e00-\u9fa5]+/.test(title);
 };
@@ -94,6 +96,7 @@ const addToANTPage = (data) => {
       <span class="outof"> 10</span>
       <br>(${data.votes} votes)</td>`);
   }
+  $('.main_column').prepend($('.box.torrent_ratings'));
 };
 const getImdbId = () => {
   let imdbLink = '';

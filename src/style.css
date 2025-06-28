@@ -1,16 +1,16 @@
-export default GM_addStyle(`
+
 .bigstar50,.bigstar45,.bigstar40,.bigstar35,.bigstar30,.bigstar25,.bigstar20,.bigstar15,.bigstar10,.bigstar05,.bigstar00 {
     display: inline-block;
-    *display: inline;
-    zoom:1;background: https://ptpimg.me/yze1gz.png) no-repeat;
-    background: -webkit-image-set(https://ptpimg.me/yze1gz.png) 1x, url(https://ptpimg.me/n74cjc.png) 2x) no-repeat;
-    background: -moz-image-set(https://ptpimg.me/yze1gz.png) 1x, url(https://ptpimg.me/n74cjc.png) 2x) no-repeat;
-    background: -o-image-set(https://ptpimg.me/yze1gz.png) 1x, url(https://ptpimg.me/n74cjc.png) 2x) no-repeat;
-    background: -ms-image-set(https://ptpimg.me/yze1gz.png) 1x, url(https://ptpimg.me/n74cjc.png) 2x) no-repeat;
+    zoom:1;
+    background: url(https://ptpimg.me/yze1gz.png) no-repeat;
+    background: -webkit-image-set(https:\/\/ptpimg.me/yze1gz.png) 1x, url(https:\/\/ptpimg.me/n74cjc.png) 2x) no-repeat;
+    background: -moz-image-set(https:\/\/ptpimg.me/yze1gz.png) 1x, url(https:\/\/ptpimg.me/n74cjc.png) 2x) no-repeat;
+    background: -o-image-set(https:\/\/ptpimg.me/yze1gz.png) 1x, url(https:\/\/ptpimg.me/n74cjc.png) 2x) no-repeat;
+    background: -ms-image-set(https:\/\/ptpimg.me/yze1gz.png) 1x, url(https:\/\/ptpimg.me/n74cjc.png) 2x) no-repeat;
     width: 75px;
     height: 15px;
     margin: 1px 0 0 0;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .bigstar50+span.rating_num,.bigstar45+span.rating_num,.bigstar40+span.rating_num,.bigstar35+span.rating_num,.bigstar30+span.rating_num,.bigstar25+span.rating_num,.bigstar20+span.rating_num,.bigstar15+span.rating_num,.bigstar10+span.rating_num,.bigstar05+span.rating_num,.bigstar00+span.rating_num {
@@ -64,7 +64,6 @@ export default GM_addStyle(`
 
 .allstar50,.allstar45,.allstar40,.allstar35,.allstar30,.allstar25,.allstar20,.allstar15,.allstar10,.allstar05,.allstar00,.rating1-t,.rating15-t,.rating2-t,.rating25-t,.rating3-t,.rating35-t,.rating4-t,.rating45-t,.rating5-t,.rating-t,.starb~.stars5,.starb~.stars4,.starb~.stars3,.starb~.stars2,.starb~.stars1,.collectors .stars5,.collectors .stars4,.collectors .stars3,.collectors .stars2,.collectors .stars1 {
     display: inline-block;
-    *display: inline;
     zoom:1;background: url(/f/movie/b8f4c3672ef81106701071831e22422a745d3b74/pics/rating_icons/ic_rating_s.png) no-repeat;
     background: -webkit-image-set(url(/f/movie/b8f4c3672ef81106701071831e22422a745d3b74/pics/rating_icons/ic_rating_s.png) 1x, url(/f/movie/076dc86067c402ced53eee7c09cd45402235733c/pics/rating_icons/ic_rating_s@2x.png) 2x) no-repeat;
     background: -moz-image-set(url(/f/movie/b8f4c3672ef81106701071831e22422a745d3b74/pics/rating_icons/ic_rating_s.png) 1x, url(/f/movie/076dc86067c402ced53eee7c09cd45402235733c/pics/rating_icons/ic_rating_s@2x.png) 2x) no-repeat;
@@ -281,7 +280,6 @@ export default GM_addStyle(`
 
 .rating_logo_wrap .content {
     display: inline-block;
-    *display: inline;
     zoom:1;vertical-align: top;
     font-size: 12px;
     line-height: 20px;
@@ -291,7 +289,6 @@ export default GM_addStyle(`
 
 .rating_helper_wrap {
     display: inline-block;
-    *display: inline;
     zoom:1;vertical-align: top;
     position: relative;
     line-height: 18px
@@ -312,7 +309,6 @@ export default GM_addStyle(`
     background: -o-image-set(url(/f/movie/16305b59f6b69b8acde51c880de2a5b6cde0155a/pics/icon/ic_qmark.png) 1x, url(/f/movie/1fb4f85391f82c3286d7318d840577daae1c2eee/pics/icon/ic_qmark@2x.png) 2x) no-repeat;
     background: -ms-image-set(url(/f/movie/16305b59f6b69b8acde51c880de2a5b6cde0155a/pics/icon/ic_qmark.png) 1x, url(/f/movie/1fb4f85391f82c3286d7318d840577daae1c2eee/pics/icon/ic_qmark@2x.png) 2x) no-repeat;
     display: inline-block;
-    *display: inline;
     zoom:1;vertical-align: middle;
     width: 12px;
     height: 12px
@@ -379,7 +375,6 @@ export default GM_addStyle(`
 
 #screening .rating {
     display: inline-block;
-    *display: inline;
     zoom:1;margin: 4px auto 2px;
     height: 19px
 }
@@ -633,7 +628,7 @@ body #douban-wrapper {
 
 #douban-wrapper #content .score-container .ratings-on-weight {
     margin-top: 10px;
-    min-weight: 1px
+    min-height: 1px
 }
 
 #douban-wrapper #content .score-container .ratings-on-weight .item {
@@ -788,7 +783,7 @@ body #douban-wrapper {
     background-color: transparent;
     text-shadow: none;
     padding: 0;
-    margin: 0
+    margin: 0;
     line-height: normal;
 }
 #douban-wrapper .grid-col5 {
@@ -868,4 +863,3 @@ body #douban-wrapper {
     background-color: #131313;
     color: #fff;
 }
-`);

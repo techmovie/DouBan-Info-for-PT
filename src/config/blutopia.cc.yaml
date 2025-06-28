@@ -1,0 +1,7 @@
+url: https://blutopia.cc
+host: blutopia.cc
+siteName: BLU
+poster: '.meta__poster'
+imdb: '.meta__imdb a[href*="imdb.com/title"]:nth-child(1)'
+insertDomSelector: .torrent__buttons
+doubanContainerDom: '<div class="douban-dom" style="position: relative;z-index: 2;"></div>'
